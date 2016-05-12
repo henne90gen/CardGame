@@ -44,7 +44,7 @@ public class Deck extends CardContainer {
 
 	private void loadFrench() {
 		try {
-			BufferedImage spriteSheet = ImageIO.read(new File("res/french.jpg"));
+			BufferedImage spriteSheet = ImageIO.read(new File("res/suits.jpg"));
 			int width = spriteSheet.getWidth() / 13;
 			int height = spriteSheet.getHeight() / 4;
 			for (int i = 0; i < 4; i++) {
@@ -63,19 +63,19 @@ public class Deck extends CardContainer {
 	}
 	
 	private void loadGerman() {
-		// TODO: get german deck
 		try {
-			BufferedImage spriteSheet = ImageIO.read(new File("res/german.jpg"));
+			BufferedImage spriteSheet = ImageIO.read(new File("res/suits.jpg"));
 			int width = spriteSheet.getWidth() / 13;
 			int height = spriteSheet.getHeight() / 4;
 			for (int i = 0; i < 4; i++) {
-				for (int j = 0; j < 8; j++) {
-					BufferedImage bi = new BufferedImage(width, height, spriteSheet.getType());
-					Graphics2D g = bi.createGraphics();
-					g.drawImage(spriteSheet, 0, 0, width, height, j * width, i * height, (j + 1) * width, (i + 1) * height, null);
-					g.dispose();
-					addCard(new Card(Suit.values()[i], j + 7, bi));
-					
+				for (int j = 0; j < 13; j++) {
+					if (j < 1 || j > 5) {
+						BufferedImage bi = new BufferedImage(width, height, spriteSheet.getType());
+						Graphics2D g = bi.createGraphics();
+						g.drawImage(spriteSheet, 0, 0, width, height, j * width, i * height, (j + 1) * width, (i + 1) * height, null);
+						g.dispose();
+						addCard(new Card(Suit.values()[i], j, bi));
+					}
 				}
 			}
 		} catch (IOException e) {

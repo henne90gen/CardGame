@@ -27,7 +27,7 @@ public class SolitairePlayer extends Player {
 		suits = new Card[maxCardsX];
 		addMouseListener(this);
 		try {
-			BufferedImage spriteSheet = ImageIO.read(new File("res/suit.png"));
+			BufferedImage spriteSheet = ImageIO.read(new File("res/suit-icons.png"));
 			int width = spriteSheet.getWidth() / maxCardsX;
 			int height = spriteSheet.getHeight();
 			for (int i = 0; i < maxCardsX; i++) {

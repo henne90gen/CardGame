@@ -20,7 +20,7 @@ public class Mau extends Game implements ActionListener {
 
 	@Override
 	protected void resetGame() {
-		deck = new Deck(DeckType.French);
+		deck = new Deck(DeckType.German);
 		deck.addActionListener(this);
 		deck.setActionCommand(DEAL_TO_BOARD);
 		gbc = new GridBagConstraints();
