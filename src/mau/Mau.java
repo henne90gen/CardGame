@@ -23,6 +23,7 @@ public class Mau extends Game implements ActionListener {
 		deck = new Deck(DeckType.German);
 		deck.addActionListener(this);
 		deck.setActionCommand(DEAL_TO_BOARD);
+		deck.shuffle();
 		gbc = new GridBagConstraints();
 		gbc.gridx = 1;
 		gbc.gridy = 2;
@@ -30,8 +31,6 @@ public class Mau extends Game implements ActionListener {
 		gbc.weighty = 1;
 		gbc.anchor = GridBagConstraints.LINE_END;
 		window.add(deck, gbc);
-
-		deck.shuffle();
 
 		mPlayer = new MauPlayer();
 		gbc = new GridBagConstraints();
