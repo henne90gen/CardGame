@@ -1,8 +1,6 @@
 package main;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
+import java.awt.*;
 
 public class Player extends CardContainer {
 	
@@ -31,9 +29,7 @@ public class Player extends CardContainer {
 		if (selectedCard == -1) {
 			return null;
 		}
-		int tmp = selectedCard;
-		selectedCard = -1;
-		return cards.get(tmp);
+		return cards.get(selectedCard);
 	}
 	
 	protected Dimension getDimension() {

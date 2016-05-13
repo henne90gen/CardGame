@@ -1,18 +1,16 @@
 package solitaire;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import main.Card;
+import main.Card.Suit;
+import main.Player;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-
-import javax.imageio.ImageIO;
-
-import main.Card;
-import main.Player;
-import main.Card.Suit;
 
 public class SolitairePlayer extends Player {
 
@@ -59,9 +57,7 @@ public class SolitairePlayer extends Player {
 		if (selectedCard == -1) {
 			return null;
 		}
-		int tmp = selectedCard;
-		selectedCard = -1;
-		return suits[tmp];
+		return suits[selectedCard];
 	}
 	
 	@Override

@@ -1,11 +1,11 @@
 package main;
 
-import java.awt.GridBagConstraints;
+import java.awt.*;
 import java.awt.event.ActionListener;
 
 public abstract class Game implements ActionListener {
 
-	public final static String DEAL_TO_BOARD = "Deal card";
+	public final static String PLAY_TO_BOARD = "Deal card";
 	public final static String PLAY_TO_PLAYER = "Move card to player";
 
 	protected Window window;

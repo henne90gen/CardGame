@@ -1,14 +1,14 @@
 package solitaire;
 
-import java.awt.GridBagConstraints;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import main.Card;
 import main.Deck;
 import main.Deck.DeckType;
 import main.Game;
 import main.Window;
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class Solitaire extends Game implements ActionListener {
 
@@ -17,14 +17,17 @@ public class Solitaire extends Game implements ActionListener {
 	
 	public Solitaire() {
 		super("Solitaire");
-	}
+        // TODO Deck for Solitaire needs to be different
+        // TODO Click on card moves it to the next possible position
+        // TODO Auto finish as soon as possible
+    }
 
 	@Override
 	protected void resetGame() {
 		deck = new Deck(DeckType.French);
 		deck.addActionListener(this);
-		deck.setActionCommand(DEAL_TO_BOARD);
-		gbc = new GridBagConstraints();
+        deck.setActionCommand(PLAY_TO_BOARD);
+        gbc = new GridBagConstraints();
 		gbc.gridx = 1;
 		gbc.gridy = 2;
 		gbc.weightx = 1;
@@ -77,8 +80,8 @@ public class Solitaire extends Game implements ActionListener {
 				sPlayer.addCard(sBoard.removeSelectedCard(), pCard.getSuit().ordinal());
 			}
 			break;
-		case DEAL_TO_BOARD:
-			for (int i = 0; i < 7; i++) {
+            case PLAY_TO_BOARD:
+                for (int i = 0; i < 7; i++) {
 				sBoard.addCard(deck.dealCard(), i);
 			}
 			break;

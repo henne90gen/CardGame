@@ -1,21 +1,15 @@
 package main;
 
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
 
 public class Window extends JFrame {
 	
 	public final static String NEW_GAME = "New Game";
-	
+	public final static String EXIT_GAME = "Exit";
+
 	private JPanel main;
 	
 	public Window(String name, ActionListener listener) {
@@ -28,12 +22,17 @@ public class Window extends JFrame {
 		JMenuBar menuBar = new JMenuBar();
 		JMenu menu = new JMenu("Game");
 		menuBar.add(menu);
-		
-		JMenuItem menuItem = new JMenuItem(NEW_GAME, KeyEvent.VK_N);
-		menuItem.addActionListener(listener);
-		menuItem.setActionCommand(NEW_GAME);
-		menu.add(menuItem);
-		
+
+		JMenuItem newGame = new JMenuItem(NEW_GAME, KeyEvent.VK_N);
+		newGame.addActionListener(listener);
+		newGame.setActionCommand(NEW_GAME);
+		menu.add(newGame);
+
+		JMenuItem exitGame = new JMenuItem(EXIT_GAME, KeyEvent.VK_X);
+		exitGame.addActionListener(listener);
+		exitGame.setActionCommand(EXIT_GAME);
+		menu.add(exitGame);
+
 		setJMenuBar(menuBar);
 		
 		main = new JPanel();

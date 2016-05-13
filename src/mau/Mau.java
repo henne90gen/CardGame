@@ -1,28 +1,39 @@
 package mau;
 
-import java.awt.GridBagConstraints;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
+import main.Card;
 import main.Deck;
 import main.Deck.DeckType;
 import main.Game;
+import main.Window;
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class Mau extends Game implements ActionListener {
+
+	public static final String DRAW_TWO_CARDS = "Draw two cards";
+	public static final String SKIP_NEXT_PLAYER = "Skip next player";
+	public static final String SWITCH_COLOR = "Switch color";
 
 	private MauPlayer mPlayer;
 	private MauPlayer mAI;
 	private MauBoard mBoard;
-	
+
+	private ArrayList<MauPlayer> players = new ArrayList<MauPlayer>();
+
 	public Mau() {
 		super("MauMau");
+		// TODO Make click on a card the play operation
 	}
 
 	@Override
 	protected void resetGame() {
+		// TODO Open popup box and ask how many players
 		deck = new Deck(DeckType.German);
 		deck.addActionListener(this);
-		deck.setActionCommand(DEAL_TO_BOARD);
+		deck.setActionCommand(PLAY_TO_PLAYER);
 		deck.shuffle();
 		gbc = new GridBagConstraints();
 		gbc.gridx = 1;
@@ -39,20 +50,20 @@ public class Mau extends Game implements ActionListener {
 		gbc.weightx = 1;
 		gbc.weighty = 1;
 		gbc.anchor = GridBagConstraints.PAGE_END;
-		mPlayer.addActionListener(this);
-		mPlayer.setActionCommand(PLAY_TO_PLAYER);
 		window.add(mPlayer, gbc);
 		
-		mAI = new MauPlayer();
+		/*mAI = new MauPlayer();
 		gbc = new GridBagConstraints();
 		gbc.gridx = 0;
 		gbc.gridy = 2;
 		gbc.weightx = 1;
 		gbc.weighty = 1;
 		gbc.anchor = GridBagConstraints.PAGE_END;
-		window.add(mAI, gbc);
+		window.add(mAI, gbc);*/
 
 		mBoard = new MauBoard();
+		mBoard.addActionListener(this);
+		mBoard.setActionCommand(PLAY_TO_BOARD);
 		gbc = new GridBagConstraints();
 		gbc.gridx = 0;
 		gbc.gridy = 1;
@@ -66,10 +77,41 @@ public class Mau extends Game implements ActionListener {
 		for (int i = 0; i < 5; i++) {
 			mPlayer.addCard(deck.dealCard());
 		}
+		mBoard.addCard(deck.dealCard());
 	}
 	
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		
+	public void actionPerformed(ActionEvent e) {
+		switch (e.getActionCommand()) {
+			case PLAY_TO_PLAYER:
+				mPlayer.addCard(deck.dealCard());
+				break;
+			case PLAY_TO_BOARD:
+				Card pCard = mPlayer.getSelectedCard();
+				Card bCard = mBoard.getTopCard();
+				if (pCard.getValue() == bCard.getValue() || pCard.getSuit() == bCard.getSuit()) {
+					mBoard.addCard(mPlayer.removeSelectedCard());
+				}
+				break;
+			case SKIP_NEXT_PLAYER:
+
+				break;
+			case DRAW_TWO_CARDS:
+				mPlayer.addCard(deck.dealCard());
+				mPlayer.addCard(deck.dealCard());
+				break;
+			case SWITCH_COLOR:
+
+				break;
+			case Window.NEW_GAME:
+				window.remove(deck);
+				window.remove(mPlayer);
+				window.remove(mBoard);
+				resetGame();
+				break;
+			case Window.EXIT_GAME:
+				System.exit(0);
+				break;
+		}
 	}
 }

@@ -1,13 +1,12 @@
 package solitaire;
 
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-
 import main.Board;
 import main.Card;
 import main.Card.Suit;
+
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 public class SolitaireBoard extends Board {
 	
@@ -139,24 +138,6 @@ public class SolitaireBoard extends Board {
 			return false;
 		}
 	}
-	
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
@@ -205,11 +186,5 @@ public class SolitaireBoard extends Board {
 			}
 		}
 		selCard = null;
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 }

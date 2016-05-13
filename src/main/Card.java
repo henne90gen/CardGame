@@ -1,20 +1,18 @@
 package main;
 
-import java.awt.Dimension;
-import java.awt.Graphics;
+import mau.MauBoard;
+import mau.MauPlayer;
+import solitaire.SolitaireBoard;
+import solitaire.SolitairePlayer;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-
-import javax.imageio.ImageIO;
-import javax.swing.JComponent;
-
-import mau.MauBoard;
-import mau.MauPlayer;
-import solitaire.SolitaireBoard;
-import solitaire.SolitairePlayer;
 
 public class Card extends JComponent implements MouseListener {
 	
@@ -202,7 +200,6 @@ public class Card extends JComponent implements MouseListener {
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
+
 	}
 }
