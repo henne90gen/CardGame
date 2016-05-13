@@ -28,7 +28,7 @@ public class Solitaire extends Game implements ActionListener {
 		deck.addActionListener(this);
         deck.setActionCommand(PLAY_TO_BOARD);
         gbc = new GridBagConstraints();
-		gbc.gridx = 1;
+        gbc.gridx = 1;
 		gbc.gridy = 2;
 		gbc.weightx = 1;
 		gbc.weighty = 1;
@@ -82,7 +82,7 @@ public class Solitaire extends Game implements ActionListener {
 			break;
             case PLAY_TO_BOARD:
                 for (int i = 0; i < 7; i++) {
-				sBoard.addCard(deck.dealCard(), i);
+                sBoard.addCard(deck.dealCard(), i);
 			}
 			break;
 		case Window.NEW_GAME:
