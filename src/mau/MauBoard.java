@@ -37,15 +37,17 @@ public class MauBoard extends Board {
 	@Override
 	public void addCard(Card card) {
 		super.addCard(card);
-		switch (card.getValue()) {
-			case 0:
-				fireActionPerformed(new ActionEvent(MauBoard.this, 0, Mau.SKIP_NEXT_PLAYER));
-				break;
-			case 6:
-				fireActionPerformed(new ActionEvent(MauBoard.this, 0, Mau.DRAW_TWO_CARDS));
-				break;
-			case 10:
-				fireActionPerformed(new ActionEvent(MauBoard.this, 0, Mau.SWITCH_COLOR));
-		}
+        if (cards.size() > 1) {
+            switch (card.getValue()) {
+                case 0:
+                    fireActionPerformed(new ActionEvent(MauBoard.this, 0, Mau.SKIP_NEXT_PLAYER));
+                    break;
+                case 6:
+                    fireActionPerformed(new ActionEvent(MauBoard.this, 0, Mau.DRAW_TWO_CARDS));
+                    break;
+                case 10:
+                    fireActionPerformed(new ActionEvent(MauBoard.this, 0, Mau.SWITCH_COLOR));
+            }
+        }
 	}
 }

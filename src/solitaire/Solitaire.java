@@ -17,9 +17,6 @@ public class Solitaire extends Game implements ActionListener {
 	
 	public Solitaire() {
 		super("Solitaire");
-        // TODO Deck for Solitaire needs to be different
-        // TODO Click on card moves it to the next possible position
-        // TODO Auto finish as soon as possible
     }
 
 	@Override
@@ -27,15 +24,14 @@ public class Solitaire extends Game implements ActionListener {
 		deck = new Deck(DeckType.French);
 		deck.addActionListener(this);
         deck.setActionCommand(PLAY_TO_BOARD);
-        gbc = new GridBagConstraints();
+		deck.shuffle();
+		gbc = new GridBagConstraints();
         gbc.gridx = 1;
 		gbc.gridy = 2;
 		gbc.weightx = 1;
 		gbc.weighty = 1;
 		gbc.anchor = GridBagConstraints.LINE_END;
 		window.add(deck, gbc);
-
-		deck.shuffle();
 
 		sPlayer = new SolitairePlayer();
 		gbc = new GridBagConstraints();

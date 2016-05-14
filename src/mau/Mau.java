@@ -25,12 +25,10 @@ public class Mau extends Game implements ActionListener {
 
 	public Mau() {
 		super("MauMau");
-		// TODO Make click on a card the play operation
 	}
 
 	@Override
 	protected void resetGame() {
-		// TODO Open popup box and ask how many players
 		deck = new Deck(DeckType.German);
 		deck.addActionListener(this);
 		deck.setActionCommand(PLAY_TO_PLAYER);
@@ -44,7 +42,9 @@ public class Mau extends Game implements ActionListener {
 		window.add(deck, gbc);
 
 		mPlayer = new MauPlayer();
-		gbc = new GridBagConstraints();
+        mPlayer.addActionListener(this);
+        mPlayer.setActionCommand(PLAY_TO_BOARD);
+        gbc = new GridBagConstraints();
 		gbc.gridx = 0;
 		gbc.gridy = 2;
 		gbc.weightx = 1;

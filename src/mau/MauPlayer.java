@@ -1,10 +1,11 @@
 package mau;
 
-import java.awt.Graphics;
-import java.awt.event.MouseEvent;
-
 import main.Card;
 import main.Player;
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
 
 public class MauPlayer extends Player {
 	
@@ -36,12 +37,10 @@ public class MauPlayer extends Player {
 	public void mousePressed(MouseEvent e) {
 		for (int i = 0; i < cards.size(); i++) {
 			if (cards.get(i).isMouseHover()) {
-				cards.get(i).setHighlighted(true);
-				if (selectedCard >= 0) cards.get(selectedCard).setHighlighted(false);
 				selectedCard = i;
-				revalidate();
-				repaint();
-			}
+                break;
+            }
 		}
-	}
+        fireActionPerformed(new ActionEvent(MauPlayer.this, 0, null));
+    }
 }
