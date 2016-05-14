@@ -4,6 +4,7 @@ import main.Board;
 import main.Card;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
@@ -39,27 +40,36 @@ public class SolitaireBoard extends Board {
 		}
 	}
 
-	/*public Card removeSelectedCard() {
-        if (selCard == null || selCard[1] != stacks[selCard[0]].size() - 1) {
-			return null;
-		}
-		Card card = stacks[selCard[0]].remove(selCard[1]);
-		selCard = null;
-		remove(card);
+	public Card removeSelectedCard() {
+        int id = -1;
+        for (int i = 0; i < maxCardsX; i++) {
+            if (stacks[i].size() != 0) {
+                Card tmp = stacks[i].get(stacks[i].size() - 1);
+                if (tmp.isHighlighted()) {
+                    id = i;
+                }
+            }
+        }
+        if (id == -1) { return null; }
+        Card c = stacks[id].remove(stacks[id].size() - 1);
+		remove(c);
 		revalidate();
 		repaint();
-		return card;
+		return c;
 	}
 
 	public Card getSelectedCard() {
-		if (selCard == null || selCard[1] != stacks[selCard[0]].size() - 1) {
-			return null;
+		for (int i = 0; i < maxCardsX; i++) {
+            Card c = (stacks[i].size() == 0)?null:stacks[i].get(stacks[i].size() - 1);
+			if (c != null && c.isHighlighted()) {
+                return c;
+            }
 		}
-		return stacks[selCard[0]].get(selCard[1]);
-	}*/
+        return null;
+	}
 
 	public Card getTopCard(int stack) {
-		return stacks[stack].get(stacks[stack].size() - 1);
+		return (stacks[stack].size() == 0)?null:stacks[stack].get(stacks[stack].size() - 1);
 	}
 
 	@Override
@@ -121,9 +131,9 @@ public class SolitaireBoard extends Board {
 		return new Dimension(Card.WIDTH * maxCardsX + border * (maxCardsX + 1), Card.HEIGHT * maxCardsY + border * (maxCardsY + 1));
 	}
 
-    public boolean areCompatible(Card current, Card previous) {
-		if (current.getValue() == previous.getValue() + 1) {
-			if (current.getSuitColor() != previous.getSuitColor()) {
+    public boolean areCompatible(Card current, Card incoming) {
+		if (current.getValue() == incoming.getValue() + 1) {
+			if (current.getSuitColor() != incoming.getSuitColor()) {
 				return true;
 			} else {
 				return false;
@@ -135,50 +145,20 @@ public class SolitaireBoard extends Board {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-        /*if (selCard != null) {
-            for (int i = selCard[1]; i < stacks[selCard[0]].size(); i++) {
-				stacks[selCard[0]].get(i).setHighlighted(false);
-			}
-			revalidate();
-			repaint();
-			for (int i = 0; i < stacks.length; i++) {
-				if (stacks[i].size() == 0) {
-					if (e.getX() > border + (Card.WIDTH + border) * i && e.getX() < (border + Card.WIDTH) * (i + 1)) {
-						int originalStackSize = stacks[selCard[0]].size();
-						for (int k = selCard[1]; k <  originalStackSize; k++) {
-							addCard(stacks[selCard[0]].remove(selCard[1]), i);
-						}
-						selCard = null;
-						revalidate();
-						repaint();
-						return;
-					}
-				}
-			}
-		}
-		for (int i = 0; i < stacks.length; i++) {
-			for (int j = 0; j < stacks[i].size(); j++) {
-				if (stacks[i].get(j).isHighlighted()) {
-					if (selCard != null && areCompatible(stacks[i].get(j), stacks[selCard[0]].get(selCard[1]))) {
-						int originalStackSize = stacks[selCard[0]].size();
-						for (int k = selCard[1]; k <  originalStackSize; k++) {
-							addCard(stacks[selCard[0]].remove(selCard[1]), i);
-						}
-						selCard = null;
-						revalidate();
-						repaint();
-						return;
-					} else {
-						selCard = new int[2];
-						selCard[0] = i;
-						selCard[1] = j;
-						revalidate();
-						repaint();
-						return;
-					}
-				}
-			}
-		}
-		selCard = null;*/
+        Card tmp = getSelectedCard();
+        fireActionPerformed(new ActionEvent(SolitaireBoard.this, 0, null));
+        Card c = getSelectedCard();
+        if (c != null) {
+            if (c.getSuit() == tmp.getSuit() && c.getValue() == tmp.getValue()) {
+                for (int i = 0; i < maxCardsX; i++) {
+                    if (stacks[i].size() != 0) {
+                        tmp = stacks[i].get(stacks[i].size() - 1);
+                        if (areCompatible(tmp, c)) {
+                            addCard(removeSelectedCard(), i);
+                        }
+                    }
+                }
+            }
+        }
 	}
 }

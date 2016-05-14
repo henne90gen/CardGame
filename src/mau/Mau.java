@@ -31,7 +31,7 @@ public class Mau extends Game implements ActionListener {
 	protected void resetGame() {
 		deck = new Deck(DeckType.German);
 		deck.addActionListener(this);
-		deck.setActionCommand(PLAY_TO_PLAYER);
+		deck.setActionCommand(DECK_TO_PLAYER);
 		deck.shuffle();
 		gbc = new GridBagConstraints();
 		gbc.gridx = 0;
@@ -43,7 +43,7 @@ public class Mau extends Game implements ActionListener {
 
 		mPlayer = new MauPlayer();
         mPlayer.addActionListener(this);
-        mPlayer.setActionCommand(PLAY_TO_BOARD);
+        mPlayer.setActionCommand(PLAYER_TO_BOARD);
         gbc = new GridBagConstraints();
 		gbc.gridx = 0;
 		gbc.gridy = 2;
@@ -83,10 +83,10 @@ public class Mau extends Game implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
-			case PLAY_TO_PLAYER:
+			case DECK_TO_PLAYER:
 				mPlayer.addCard(deck.dealCard());
 				break;
-			case PLAY_TO_BOARD:
+			case PLAYER_TO_BOARD:
 				Card pCard = mPlayer.getSelectedCard();
 				Card bCard = mBoard.getTopCard();
 				if (pCard.getValue() == bCard.getValue() || pCard.getSuit() == bCard.getSuit()) {

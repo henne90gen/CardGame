@@ -5,8 +5,10 @@ import java.awt.event.ActionListener;
 
 public abstract class Game implements ActionListener {
 
-	public final static String PLAY_TO_BOARD = "Deal card";
-	public final static String PLAY_TO_PLAYER = "Move card to player";
+	public final static String DECK_TO_BOARD = "deck to card";
+	public final static String DECK_TO_PLAYER = "deck to player";
+	public final static String BOARD_TO_PLAYER = "board to player";
+	public final static String PLAYER_TO_BOARD = "player to board";
 
 	protected Window window;
 	protected GridBagConstraints gbc;

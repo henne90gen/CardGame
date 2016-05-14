@@ -2,7 +2,6 @@ package main;
 
 import mau.MauBoard;
 import mau.MauPlayer;
-import solitaire.Solitaire;
 import solitaire.SolitaireBoard;
 import solitaire.SolitaireDeck;
 import solitaire.SolitairePlayer;
@@ -166,17 +165,7 @@ public class Card extends JComponent implements MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		if (getParent().getClass() == Deck.class) {
-			((Deck)getParent()).mouseClicked(e);
-		} else if (getParent().getClass() == GenericPlayer.class) {
-			((GenericPlayer)getParent()).mouseClicked(e);
-		} else if (getParent().getClass() == SolitairePlayer.class) {
-			((SolitairePlayer)getParent()).mouseClicked(e);
-		} else if (getParent().getClass() == GenericBoard.class) {
-			((GenericBoard)getParent()).mouseClicked(e);
-		} else if (getParent().getClass() == SolitaireBoard.class) {
-			((SolitaireBoard)getParent()).mouseClicked(e);
-		}
+
 	}
 
 	@Override
