@@ -67,13 +67,13 @@ public class Solitaire extends Game implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
 			case PLAY_TO_PLAYER:
-				Card bCard = m_board.getSelectedCard();
-				if (bCard == null) { break; }
+                /*Card bCard = m_board.getSelectedCard();
+                if (bCard == null) { break; }
 				Card pCard = m_player.getSelectedCard();
 				if (pCard == null) { break; }
 				if (bCard.getSuit() == pCard.getSuit() && bCard.getValue() - 1 == pCard.getValue()) {
 					m_player.addCard(m_board.removeSelectedCard(), pCard.getSuit().ordinal());
-				}
+				}*/
 				break;
 			case PLAY_TO_BOARD:
                 for (int i = 0; i < 7; i++) {

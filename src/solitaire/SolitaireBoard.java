@@ -2,15 +2,13 @@ package solitaire;
 
 import main.Board;
 import main.Card;
-import main.Card.Suit;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 public class SolitaireBoard extends Board {
-	
-	private int[] selCard;
+
 	private ArrayList<Card>[] stacks;
 	
 	public SolitaireBoard() {
@@ -18,7 +16,6 @@ public class SolitaireBoard extends Board {
 		maxCardsX = 7;
 		maxCardsY = 3;
 		cards = null;
-		selCard = null;
 		stacks = new ArrayList[maxCardsX];
 		addMouseListener(this);
 		for (int i = 0; i < stacks.length; i++) {
@@ -41,9 +38,9 @@ public class SolitaireBoard extends Board {
 			repaint();
 		}
 	}
-	
-	public Card removeSelectedCard() {
-		if (selCard == null || selCard[1] != stacks[selCard[0]].size() - 1) {
+
+	/*public Card removeSelectedCard() {
+        if (selCard == null || selCard[1] != stacks[selCard[0]].size() - 1) {
 			return null;
 		}
 		Card card = stacks[selCard[0]].remove(selCard[1]);
@@ -53,13 +50,13 @@ public class SolitaireBoard extends Board {
 		repaint();
 		return card;
 	}
-	
+
 	public Card getSelectedCard() {
 		if (selCard == null || selCard[1] != stacks[selCard[0]].size() - 1) {
 			return null;
 		}
 		return stacks[selCard[0]].get(selCard[1]);
-	}
+	}*/
 
 	public Card getTopCard(int stack) {
 		return stacks[stack].get(stacks[stack].size() - 1);
@@ -67,36 +64,31 @@ public class SolitaireBoard extends Board {
 
 	@Override
 	public void paintComponent(Graphics g) {
-		if (selCard!= null) {
-			stacks[selCard[0]].get(selCard[1]).setHighlighted(true);
-		}
 		setHighlightedCards();
 		for (int i = 0; i < stacks.length; i++) {
 			for (int j = 0; j < stacks[i].size(); j++) {
 				int x = border + i * (Card.WIDTH + border);
 				int y = (int)(border + j * (border * 1.5f));
-				if (j == stacks[i].size() - 1 && !initiating) { 
-					stacks[i].get(j).setFaceUp(true);
+                if (j == stacks[i].size() - 1 && !initiating) {
+                    stacks[i].get(j).setFaceUp(true);
 				}
 				if (stacks[i].get(j).isHighlighted()) {
-					y -= border / 2; 
-				}
+                    y -= border / 2;
+                }
 				stacks[i].get(j).setLocation(x, y);
 			}
 		}
 		super.paintComponent(g);
 	}
-	
+
 	private void setHighlightedCards() {
-		for (int s = 0; s < stacks.length; s++) {
-			for (int i = 0; i < stacks[s].size(); i++) {
-				if (selCard == null || (s == selCard[0] && selCard[1] > i) || s != selCard[0]) {
-					stacks[s].get(i).setHighlighted(false);
-				}
-			}
-		}
-		boolean shouldHighlight = false;
-		int stack = -1;
+        for (ArrayList<Card> stack : stacks) {
+            for (Card c : stack) {
+                c.setHighlighted(false);
+            }
+        }
+        boolean shouldHighlight = false;
+        int stack = -1;
 		int id = 0;
 		for (int s = 0; s < stacks.length; s++) {
 			for (int i = 0; i < stacks[s].size(); i++) {
@@ -128,8 +120,8 @@ public class SolitaireBoard extends Board {
 	protected Dimension getDimension() {
 		return new Dimension(Card.WIDTH * maxCardsX + border * (maxCardsX + 1), Card.HEIGHT * maxCardsY + border * (maxCardsY + 1));
 	}
-	
-	public boolean areCompatible(Card current, Card previous) {
+
+    public boolean areCompatible(Card current, Card previous) {
 		if (current.getValue() == previous.getValue() + 1) {
 			if (current.getSuitColor() != previous.getSuitColor()) {
 				return true;
@@ -143,8 +135,8 @@ public class SolitaireBoard extends Board {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		if (selCard != null) {
-			for (int i = selCard[1]; i < stacks[selCard[0]].size(); i++) {
+        /*if (selCard != null) {
+            for (int i = selCard[1]; i < stacks[selCard[0]].size(); i++) {
 				stacks[selCard[0]].get(i).setHighlighted(false);
 			}
 			revalidate();
@@ -187,6 +179,6 @@ public class SolitaireBoard extends Board {
 				}
 			}
 		}
-		selCard = null;
+		selCard = null;*/
 	}
 }
