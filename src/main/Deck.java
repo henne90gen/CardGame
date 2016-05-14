@@ -23,13 +23,12 @@ public class Deck extends CardContainer {
 	
 	private DeckType type;
 	private Random rand;
+	protected ArrayList<Card> faceUpStack = new ArrayList<Card>();
 	
 	public Deck(DeckType type) {
 		this.type = type;
 		rand = new Random();
 		border = 5;
-		maxCardsX = 1;
-		maxCardsY = 1;
 		addMouseListener(this);
 		switch (type) {
 		case French:
@@ -113,17 +112,11 @@ public class Deck extends CardContainer {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		g.fillRect(0, 0, getDimension().width, getDimension().height);
-		if (!isEmpty()) {
-			for (int i = 0; i < cards.size(); i++) {
-				cards.get(i).setFaceUp(false);
-				cards.get(i).setLocation(border, border);
-			}
-		}
 	}
 	
 	@Override
 	protected Dimension getDimension() {
-		return new Dimension(Card.WIDTH + 2 * border, Card.HEIGHT + 2 * border);
+		return new Dimension((Card.WIDTH + border) * maxCardsX + border, (Card.HEIGHT + border) * maxCardsY + border);
 	}
 	
 	@Override

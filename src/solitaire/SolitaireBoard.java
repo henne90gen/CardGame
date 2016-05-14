@@ -60,7 +60,11 @@ public class SolitaireBoard extends Board {
 		}
 		return stacks[selCard[0]].get(selCard[1]);
 	}
-	
+
+	public Card getTopCard(int stack) {
+		return stacks[stack].get(stacks[stack].size() - 1);
+	}
+
 	@Override
 	public void paintComponent(Graphics g) {
 		if (selCard!= null) {
@@ -125,11 +129,9 @@ public class SolitaireBoard extends Board {
 		return new Dimension(Card.WIDTH * maxCardsX + border * (maxCardsX + 1), Card.HEIGHT * maxCardsY + border * (maxCardsY + 1));
 	}
 	
-	private boolean areCompatible(Card current, Card previous) {
+	public boolean areCompatible(Card current, Card previous) {
 		if (current.getValue() == previous.getValue() + 1) {
-			if ((current.getSuit() == Suit.Clubs || current.getSuit() == Suit.Spades) && (previous.getSuit() == Suit.Hearts || previous.getSuit() == Suit.Diamonds)) {
-				return true;
-			} else if ((current.getSuit() == Suit.Diamonds || current.getSuit() == Suit.Hearts) && (previous.getSuit() == Suit.Clubs || previous.getSuit() == Suit.Spades)) {
+			if (current.getSuitColor() != previous.getSuitColor()) {
 				return true;
 			} else {
 				return false;

@@ -2,7 +2,9 @@ package main;
 
 import mau.MauBoard;
 import mau.MauPlayer;
+import solitaire.Solitaire;
 import solitaire.SolitaireBoard;
+import solitaire.SolitaireDeck;
 import solitaire.SolitairePlayer;
 
 import javax.imageio.ImageIO;
@@ -18,7 +20,11 @@ public class Card extends JComponent implements MouseListener {
 	
 	public final static int WIDTH = 73;
 	public final static int HEIGHT = 98;
-	
+
+    public enum SuitColor {
+        Red, Black
+    }
+
 	public enum Suit {
 		Clubs, Spades, Hearts, Diamonds
 	}
@@ -56,7 +62,15 @@ public class Card extends JComponent implements MouseListener {
 	public Suit getSuit() {
 		return suit;
 	}
-	
+
+    public SuitColor getSuitColor() {
+        if (getSuit() == Suit.Hearts || getSuit() == Suit.Diamonds) {
+            return SuitColor.Red;
+        } else {
+            return SuitColor.Black;
+        }
+    }
+
 	public int getValue() {
 		return value;
 	}
@@ -181,8 +195,11 @@ public class Card extends JComponent implements MouseListener {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
+        e.translatePoint((int)this.getLocation().getX(), (int)this.getLocation().getY());
 		if (getParent().getClass() == Deck.class) {
 			((Deck)getParent()).mousePressed(e);
+		} else if (getParent().getClass() == SolitaireDeck.class) {
+			((SolitaireDeck)getParent()).mousePressed(e);
 		} else if (getParent().getClass() == GenericPlayer.class) {
 			((GenericPlayer)getParent()).mousePressed(e);
 		} else if (getParent().getClass() == SolitairePlayer.class) {

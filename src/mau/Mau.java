@@ -34,8 +34,8 @@ public class Mau extends Game implements ActionListener {
 		deck.setActionCommand(PLAY_TO_PLAYER);
 		deck.shuffle();
 		gbc = new GridBagConstraints();
-		gbc.gridx = 1;
-		gbc.gridy = 2;
+		gbc.gridx = 0;
+		gbc.gridy = 1;
 		gbc.weightx = 1;
 		gbc.weighty = 1;
 		gbc.anchor = GridBagConstraints.LINE_END;
@@ -61,7 +61,7 @@ public class Mau extends Game implements ActionListener {
 		gbc.anchor = GridBagConstraints.PAGE_END;
 		window.add(mAI, gbc);*/
 
-		mBoard = new MauBoard();
+		/*mBoard = new MauBoard();
 		mBoard.addActionListener(this);
 		mBoard.setActionCommand(PLAY_TO_BOARD);
 		gbc = new GridBagConstraints();
@@ -70,14 +70,14 @@ public class Mau extends Game implements ActionListener {
 		gbc.weightx = 1;
 		gbc.weighty = 1;
 		gbc.anchor = GridBagConstraints.PAGE_START;
-		window.add(mBoard, gbc);
+		window.add(mBoard, gbc);*/
 
 		window.pack();
 		
 		for (int i = 0; i < 5; i++) {
 			mPlayer.addCard(deck.dealCard());
 		}
-		mBoard.addCard(deck.dealCard());
+		//mBoard.addCard(deck.dealCard());
 	}
 	
 	@Override

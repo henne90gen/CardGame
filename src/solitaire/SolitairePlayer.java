@@ -59,7 +59,11 @@ public class SolitairePlayer extends Player {
 		}
 		return suits[selectedCard];
 	}
-	
+
+	public Card getCard(int suit) {
+		return suits[suit];
+	}
+
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
