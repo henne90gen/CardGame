@@ -122,7 +122,7 @@ public class Solitaire extends Game implements ActionListener {
 		}
 	}
 
-	private boolean moveCardToPlayer(Card c) {
+	public boolean moveCardToPlayer(Card c) {
 		if (c != null && m_board.isTopCard(c)) {
 			if (c.getValue() == 0 || m_player.getCard(c.getSuit().ordinal()).getValue() + 1 == c.getValue()) {
 				ArrayList<Card> cl = m_board.removeSelectedCards();
@@ -133,7 +133,7 @@ public class Solitaire extends Game implements ActionListener {
 		return false;
 	}
 
-	private void autoFinishGame() {
+	public void autoFinishGame() {
 		while (!m_player.gameIsFinished()) {
 			for (int i = 0; i < m_board.getMaxCardsX(); i++) {
 				Card c = m_board.getTopCard(i);
