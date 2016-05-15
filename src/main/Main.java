@@ -1,6 +1,5 @@
 package main;
 
-import mau.Mau;
 import solitaire.Solitaire;
 
 public class Main {
