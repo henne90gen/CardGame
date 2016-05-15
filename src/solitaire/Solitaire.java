@@ -7,6 +7,7 @@ import main.Window;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class Solitaire extends Game implements ActionListener {
 
@@ -71,9 +72,10 @@ public class Solitaire extends Game implements ActionListener {
             case BOARD_TO_PLAYER:
             {
                 Card c = m_board.getSelectedCard();
-                if (c == null) { break; }
+                if (c == null || !m_board.isTopCard(c)) { break; }
                 if (c.getValue() == 0 || m_player.getCard(c.getSuit().ordinal()).getValue() + 1 == c.getValue()) {
-                    m_player.addCard(m_board.removeSelectedCard(), c.getSuit().ordinal());
+					ArrayList<Card> cl = m_board.removeSelectedCards();
+					m_player.addCard(cl.get(cl.size() - 1), c.getSuit().ordinal());
                 }
                 break;
             }
@@ -91,7 +93,10 @@ public class Solitaire extends Game implements ActionListener {
                             m_board.addCard(m_deck.removeFaceUpCard(), i);
                             break;
                         }
-                    }
+                    } else if (c.getValue() == 12) {
+						m_board.addCard(m_deck.removeFaceUpCard(), i);
+						break;
+					}
                 }
                 break;
             }

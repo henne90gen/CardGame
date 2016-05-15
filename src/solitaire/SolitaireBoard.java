@@ -40,30 +40,47 @@ public class SolitaireBoard extends Board {
 		}
 	}
 
-	public Card removeSelectedCard() {
+    public void addCard(ArrayList<Card> c, int stack) {
+        for (int i = 0; i < c.size(); i++) {
+            addCard(c.get(i), stack);
+        }
+    }
+
+	public ArrayList<Card> removeSelectedCards() {
+        int stack = -1;
         int id = -1;
         for (int i = 0; i < maxCardsX; i++) {
-            if (stacks[i].size() != 0) {
-                Card tmp = stacks[i].get(stacks[i].size() - 1);
+            for (int j = 0; j < stacks[i].size(); j++) {
+                Card tmp = stacks[i].get(j);
                 if (tmp.isHighlighted()) {
-                    id = i;
+                    stack = i;
+                    id = j;
+                    break;
                 }
             }
+            if (stack != -1 && id != -1) break;
         }
-        if (id == -1) { return null; }
-        Card c = stacks[id].remove(stacks[id].size() - 1);
-		remove(c);
-		revalidate();
-		repaint();
-		return c;
+        if (stack == -1 || id == -1) return null;
+        int stackSize = stacks[stack].size();
+        ArrayList<Card> result = new ArrayList<Card>();
+        for (int i = id; i < stackSize; i++) {
+            Card c = stacks[stack].remove(id);
+            remove(c);
+            revalidate();
+            repaint();
+            result.add(c);
+        }
+		return result;
 	}
 
 	public Card getSelectedCard() {
 		for (int i = 0; i < maxCardsX; i++) {
-            Card c = (stacks[i].size() == 0)?null:stacks[i].get(stacks[i].size() - 1);
-			if (c != null && c.isHighlighted()) {
-                return c;
-            }
+			for (int j = 0; j < stacks[i].size(); j++) {
+				Card c = stacks[i].get(j);
+				if (c != null && c.isHighlighted()) {
+					return c;
+				}
+			}
 		}
         return null;
 	}
@@ -150,15 +167,33 @@ public class SolitaireBoard extends Board {
         Card c = getSelectedCard();
         if (c != null) {
             if (c.getSuit() == tmp.getSuit() && c.getValue() == tmp.getValue()) {
-                for (int i = 0; i < maxCardsX; i++) {
+                for (int i = 0; i < stacks.length; i++) {
                     if (stacks[i].size() != 0) {
                         tmp = stacks[i].get(stacks[i].size() - 1);
                         if (areCompatible(tmp, c)) {
-                            addCard(removeSelectedCard(), i);
+                            addCard(removeSelectedCards(), i);
                         }
+                    } else if (c.getValue() == 12) {
+                        addCard(removeSelectedCards(), i);
                     }
                 }
             }
         }
 	}
+
+    public boolean isTopCard(Card card) {
+        for (int i = 0; i < stacks.length; i++) {
+            for (int j = 0; j < stacks[i].size(); j++) {
+                Card c = stacks[i].get(j);
+                if (c.getSuit() == card.getSuit() && c.getValue() == card.getValue()) {
+                    if (j == stacks[i].size() - 1) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            }
+        }
+        return false;
+    }
 }
