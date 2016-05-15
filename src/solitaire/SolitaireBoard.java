@@ -27,7 +27,6 @@ public class SolitaireBoard extends Board {
 	public void addCard(Card card, int stack) {
 		if (card != null) {
 			card.setFaceUp(!initiating);
-			
 			for (Card c : stacks[stack]) {
 				remove(c);
 			}
@@ -195,5 +194,27 @@ public class SolitaireBoard extends Board {
             }
         }
         return false;
+    }
+
+    public boolean canFinish() {
+        for (int i = 0; i < stacks.length; i++) {
+            for (int j = 0; j < stacks[i].size(); j++) {
+                if (!stacks[i].get(j).isFaceUp()) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public void setSelectedCard(Card card) {
+        for (int i = 0; i < stacks.length; i++) {
+            for (int j = 0; j < stacks[i].size(); j++) {
+                Card c = stacks[i].get(j);
+                if (c.getSuit() == card.getSuit() && c.getValue() == card.getValue()) {
+                    stacks[i].get(j).setHighlighted(true);
+                }
+            }
+        }
     }
 }

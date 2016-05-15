@@ -71,12 +71,7 @@ public class Solitaire extends Game implements ActionListener {
 		switch (e.getActionCommand()) {
             case BOARD_TO_PLAYER:
             {
-                Card c = m_board.getSelectedCard();
-                if (c == null || !m_board.isTopCard(c)) { break; }
-                if (c.getValue() == 0 || m_player.getCard(c.getSuit().ordinal()).getValue() + 1 == c.getValue()) {
-					ArrayList<Card> cl = m_board.removeSelectedCards();
-					m_player.addCard(cl.get(cl.size() - 1), c.getSuit().ordinal());
-                }
+                moveCardToPlayer(m_board.getSelectedCard());
                 break;
             }
 			case DECK_TO_BOARD:         // deck to player and then deck to board
@@ -100,12 +95,56 @@ public class Solitaire extends Game implements ActionListener {
                 }
                 break;
             }
+			case PLAYER_TO_BOARD:
+				Card c = m_player.getSelectedCard();
+				for (int i = 0; i < m_board.getMaxCardsX(); i++) {
+					if (m_board.getTopCard(i) != null) {
+						if (m_board.areCompatible(m_board.getTopCard(i), c)) {
+							m_board.addCard(m_deck.removeFaceUpCard(), i);
+							break;
+						}
+					}
+				}
+				break;
 			case Window.NEW_GAME:
 				window.remove(m_deck);
 				window.remove(m_player);
 				window.remove(m_board);
 				resetGame();
 				break;
+			case Window.EXIT_GAME:
+				window.dispose();
+				System.exit(0);
+				break;
+		}
+		if (m_board.canFinish()) {
+			autoFinishGame();
+		}
+	}
+
+	private boolean moveCardToPlayer(Card c) {
+		if (c != null && m_board.isTopCard(c)) {
+			if (c.getValue() == 0 || m_player.getCard(c.getSuit().ordinal()).getValue() + 1 == c.getValue()) {
+				ArrayList<Card> cl = m_board.removeSelectedCards();
+				m_player.addCard(cl.get(cl.size() - 1), c.getSuit().ordinal());
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private void autoFinishGame() {
+		while (!m_player.gameIsFinished()) {
+			for (int i = 0; i < m_board.getMaxCardsX(); i++) {
+				Card c = m_board.getTopCard(i);
+				m_board.setSelectedCard(c);
+				moveCardToPlayer(c);
+			}
+			if (m_deck.getFaceUpCard() != null) {
+				actionPerformed(new ActionEvent(Solitaire.this, 0, DECK_TO_BOARD));
+			} else {
+				m_deck.showNextCard();
+			}
 		}
 	}
 }

@@ -110,6 +110,7 @@ public class Mau extends Game implements ActionListener {
 				resetGame();
 				break;
 			case Window.EXIT_GAME:
+				window.dispose();
 				System.exit(0);
 				break;
 		}

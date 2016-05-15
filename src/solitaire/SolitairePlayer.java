@@ -11,10 +11,12 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class SolitairePlayer extends Player {
 
-	private Card[] suits;
+	//private Card[] suits;
+	private ArrayList<Card>[] stacks;
 	
 	public SolitairePlayer() {
 		border = 10;
@@ -22,7 +24,11 @@ public class SolitairePlayer extends Player {
 		maxCardsY = 1;
 		cards = null;
 		selectedCard = -1;
-		suits = new Card[maxCardsX];
+		//suits = new Card[maxCardsX];
+		stacks = new ArrayList[maxCardsX];
+		for (int i = 0; i < stacks.length; i++) {
+			stacks[i] = new ArrayList();
+		}
 		addMouseListener(this);
 		try {
 			BufferedImage spriteSheet = ImageIO.read(new File("res/suit-icons.png"));
@@ -42,11 +48,13 @@ public class SolitairePlayer extends Player {
 	
 	public void addCard(Card card, int stack) {
 		if (card != null) {
-			if (suits[stack] !=  null) {
-				remove(suits[stack]);
+			for (Card c : stacks[stack]) {
+				remove(c);
 			}
-			suits[stack] = card;
-			add(suits[stack]);
+			stacks[stack].add(card);
+			for (int i = stacks[stack].size() - 1; i >= 0; i--) {
+				add(stacks[stack].get(i));
+			}
 			revalidate();
 			repaint();
 		}
@@ -57,30 +65,41 @@ public class SolitairePlayer extends Player {
 		if (selectedCard == -1) {
 			return null;
 		}
-		return suits[selectedCard];
+		return stacks[selectedCard].get(stacks[selectedCard].size() - 1);
 	}
 
 	public Card getCard(int suit) {
-		return suits[suit];
+		return stacks[suit].get(stacks[suit].size() - 1);
 	}
 
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		for (int i = 0; i < maxCardsX; i++) {
-			int x = border + (Card.WIDTH + border) * i;
-			int y = border;
-			suits[i].setLocation(x, y);
+		for (int i = 0; i < stacks.length; i++) {
+			for (int j = 0; j < stacks[i].size(); j++) {
+				int x = border + (Card.WIDTH + border) * i;
+				int y = border;
+				stacks[i].get(j).setLocation(x, y);
+			}
 		}
 	}
 	
 	@Override
 	public void mousePressed(MouseEvent e) {
-		for (int i = 0; i < suits.length; i++) {
-			if (suits[i].isMouseHover()) {
+		for (int i = 0; i < stacks.length; i++) {
+			if (stacks[i].get(stacks[i].size() - 1).isMouseHover()) {
 				selectedCard = i;
 			}
 		}
 		fireActionPerformed(new ActionEvent(SolitairePlayer.this, 0, null));
+	}
+
+	public boolean gameIsFinished() {
+		for (int i = 0; i < stacks.length; i++) {
+			if (stacks[i].get(stacks[i].size() - 1).getValue() != 12) {
+				return false;
+			}
+		}
+		return true;
 	}
 }
