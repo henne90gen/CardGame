@@ -2,15 +2,14 @@ package test;
 
 import org.junit.Before;
 import org.junit.Test;
+import solitaire.Solitaire;
 
 /**
  * Created by Henne on 5/15/2016.
  */
 public class SolitaireDeckTest {
-    @Before
-    public void setUp() throws Exception {
-        // stuff
-    }
+
+    private Solitaire solitaire;
 
     @Test
     public void showNextCard() throws Exception {
