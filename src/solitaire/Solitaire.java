@@ -21,39 +21,13 @@ public class Solitaire extends Game implements ActionListener {
 
 	@Override
 	protected void resetGame() {
-		m_deck = new SolitaireDeck();
-		m_deck.addActionListener(this);
-        m_deck.setActionCommand(DECK_TO_BOARD);
-        m_deck.shuffle();
-		gbc = new GridBagConstraints();
-        gbc.gridx = 1;
-		gbc.gridy = 2;
-		gbc.weightx = 1;
-		gbc.weighty = 1;
-		gbc.anchor = GridBagConstraints.LINE_END;
-		window.add(m_deck, gbc);
+		resetDeck();
+		getDeck().shuffle();
 
-		m_player = new SolitairePlayer();
-        m_player.addActionListener(this);
-        m_player.setActionCommand(PLAYER_TO_BOARD);
-		gbc = new GridBagConstraints();
-		gbc.gridx = 0;
-		gbc.gridy = 2;
-		gbc.weightx = 1;
-		gbc.weighty = 1;
-		gbc.anchor = GridBagConstraints.PAGE_END;
-		window.add(m_player, gbc);
+		resetPlayer();
 
-		m_board = new SolitaireBoard();
-        m_board.addActionListener(this);
-        m_board.setActionCommand(BOARD_TO_PLAYER);
-		gbc = new GridBagConstraints();
-		gbc.gridx = 0;
-		gbc.gridy = 1;
-		gbc.weightx = 1;
-		gbc.weighty = 1;
-		gbc.anchor = GridBagConstraints.PAGE_START;
-		window.add(m_board, gbc);
+		resetBoard();
+
 
 		window.pack();
 
@@ -65,7 +39,7 @@ public class Solitaire extends Game implements ActionListener {
 		}
 		m_board.setInitiation(false);
 	}
-	
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
@@ -100,7 +74,7 @@ public class Solitaire extends Game implements ActionListener {
 				for (int i = 0; i < m_board.getMaxCardsX(); i++) {
 					if (m_board.getTopCard(i) != null) {
 						if (m_board.areCompatible(m_board.getTopCard(i), c)) {
-							m_board.addCard(m_deck.removeFaceUpCard(), i);
+							m_board.addCard(m_player.removeSelectedCard(), i);
 							break;
 						}
 					}
@@ -126,6 +100,9 @@ public class Solitaire extends Game implements ActionListener {
 		if (c != null && m_board.isTopCard(c)) {
 			if (c.getValue() == 0 || m_player.getCard(c.getSuit().ordinal()).getValue() + 1 == c.getValue()) {
 				ArrayList<Card> cl = m_board.removeSelectedCards();
+				if (cl == null) {
+					return false;
+				}
 				m_player.addCard(cl.get(cl.size() - 1), c.getSuit().ordinal());
 				return true;
 			}
@@ -137,8 +114,10 @@ public class Solitaire extends Game implements ActionListener {
 		while (!m_player.gameIsFinished()) {
 			for (int i = 0; i < m_board.getMaxCardsX(); i++) {
 				Card c = m_board.getTopCard(i);
-				m_board.setSelectedCard(c);
-				moveCardToPlayer(c);
+				if (c != null) {
+					m_board.setSelectedCard(c);
+					moveCardToPlayer(c);
+				}
 			}
 			if (m_deck.getFaceUpCard() != null) {
 				actionPerformed(new ActionEvent(Solitaire.this, 0, DECK_TO_BOARD));
@@ -146,5 +125,68 @@ public class Solitaire extends Game implements ActionListener {
 				m_deck.showNextCard();
 			}
 		}
+	}
+
+	@Override
+	public SolitairePlayer getPlayer() {
+		return m_player;
+	}
+
+	@Override
+	public SolitaireBoard getBoard() {
+		return m_board;
+	}
+
+	@Override
+	public SolitaireDeck getDeck() {
+		return m_deck;
+	}
+
+	public void resetPlayer() {
+		if (m_player != null) {
+			window.remove(m_player);
+		}
+		m_player = new SolitairePlayer();
+		m_player.addActionListener(this);
+		m_player.setActionCommand(PLAYER_TO_BOARD);
+		gbc = new GridBagConstraints();
+		gbc.gridx = 0;
+		gbc.gridy = 2;
+		gbc.weightx = 1;
+		gbc.weighty = 1;
+		gbc.anchor = GridBagConstraints.PAGE_END;
+		window.add(m_player, gbc);
+	}
+
+	public void resetBoard() {
+		if (m_board != null) {
+			window.remove(m_board);
+		}
+		m_board = new SolitaireBoard();
+		m_board.addActionListener(this);
+		m_board.setActionCommand(BOARD_TO_PLAYER);
+		gbc = new GridBagConstraints();
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		gbc.weightx = 1;
+		gbc.weighty = 1;
+		gbc.anchor = GridBagConstraints.PAGE_START;
+		window.add(m_board, gbc);
+	}
+
+	public void resetDeck() {
+		if (m_deck != null) {
+			window.remove(m_deck);
+		}
+		m_deck = new SolitaireDeck();
+		m_deck.addActionListener(this);
+		m_deck.setActionCommand(DECK_TO_BOARD);
+		gbc = new GridBagConstraints();
+		gbc.gridx = 1;
+		gbc.gridy = 2;
+		gbc.weightx = 1;
+		gbc.weighty = 1;
+		gbc.anchor = GridBagConstraints.LINE_END;
+		window.add(m_deck, gbc);
 	}
 }

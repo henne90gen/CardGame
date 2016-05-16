@@ -43,11 +43,20 @@ public class Window extends JFrame {
 		main.setLayout(new GridBagLayout());
 		add(main);
 	}
-	
+
+	public void refresh() {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				revalidate();
+				repaint();
+			}
+		});
+	}
+
 	public void add(CardContainer c, GridBagConstraints gbc) {
 		main.add(c, gbc);
-		revalidate();
-		repaint();
+		refresh();
 	}
 	
 	public void remove(CardContainer c) {

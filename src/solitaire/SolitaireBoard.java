@@ -23,7 +23,7 @@ public class SolitaireBoard extends Board {
 			stacks[i] = new ArrayList<Card>();
 		}
 	}
-	
+
 	public void addCard(Card card, int stack) {
 		if (card != null) {
 			card.setFaceUp(!initiating);
@@ -34,13 +34,12 @@ public class SolitaireBoard extends Board {
 			for (int i = stacks[stack].size() - 1; i >= 0; i--) {
 				add(stacks[stack].get(i));
 			}
-			revalidate();
-			repaint();
+			refresh();
 		}
 	}
 
-    public void addCard(ArrayList<Card> c, int stack) {
-        for (int i = 0; i < c.size(); i++) {
+	public void addCard(ArrayList<Card> c, int stack) {
+		for (int i = 0; i < c.size(); i++) {
             addCard(c.get(i), stack);
         }
     }
@@ -65,9 +64,8 @@ public class SolitaireBoard extends Board {
         for (int i = id; i < stackSize; i++) {
             Card c = stacks[stack].remove(id);
             remove(c);
-            revalidate();
-            repaint();
-            result.add(c);
+			refresh();
+			result.add(c);
         }
 		return result;
 	}
@@ -208,7 +206,12 @@ public class SolitaireBoard extends Board {
     }
 
     public void setSelectedCard(Card card) {
-        for (int i = 0; i < stacks.length; i++) {
+		for (int i = 0; i < stacks.length; i++) {
+			for (int j = 0; j < stacks[i].size(); j++) {
+				stacks[i].get(j).setHighlighted(false);
+			}
+		}
+		for (int i = 0; i < stacks.length; i++) {
             for (int j = 0; j < stacks[i].size(); j++) {
                 Card c = stacks[i].get(j);
                 if (c.getSuit() == card.getSuit() && c.getValue() == card.getValue()) {
@@ -217,4 +220,17 @@ public class SolitaireBoard extends Board {
             }
         }
     }
+
+	public void setSelectedCard(int stack, int index) {
+		for (int i = 0; i < stacks.length; i++) {
+			for (int j = 0; j < stacks[i].size(); j++) {
+				stacks[i].get(j).setHighlighted(false);
+			}
+		}
+		if (stack >= 0 && stack < stacks.length) {
+			if (index >= 0 && index < stacks[stack].size()) {
+				stacks[stack].get(index).setHighlighted(true);
+			}
+		}
+	}
 }

@@ -79,7 +79,22 @@ public class Mau extends Game implements ActionListener {
 		}
 		//mBoard.addCard(deck.dealCard());
 	}
-	
+
+	@Override
+	public MauPlayer getPlayer() {
+		return mPlayer;
+	}
+
+	@Override
+	public MauBoard getBoard() {
+		return mBoard;
+	}
+
+	@Override
+	public Deck getDeck() {
+		return deck;
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {

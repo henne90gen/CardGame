@@ -1,13 +1,12 @@
 package main;
 
-import java.awt.Dimension;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
-
-import javax.swing.JPanel;
 
 public class CardContainer extends JPanel implements MouseListener {
 	
@@ -24,11 +23,20 @@ public class CardContainer extends JPanel implements MouseListener {
 			for (int i = cards.size() - 1; i >= 0; i--) {
 				add(cards.get(i));
 			}
-			revalidate();
-			repaint();
+			refresh();
 		}
 	}
-	
+
+	public void refresh() {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				revalidate();
+				repaint();
+			}
+		});
+	}
+
 	public void addActionListener(ActionListener listener) {
 		listenerList.add(ActionListener.class, listener);
 	}

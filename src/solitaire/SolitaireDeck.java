@@ -42,8 +42,7 @@ public class SolitaireDeck extends Deck {
             for (int i = faceUpStack.size() - 1; i >= 0; i--) {
                 add(faceUpStack.get(i));
             }
-            revalidate();
-            repaint();
+            refresh();
         } else {
             for (int i = faceUpStack.size() - 1; i >= 0; i--) {
                 cards.add(faceUpStack.remove(i));
@@ -51,8 +50,7 @@ public class SolitaireDeck extends Deck {
             for (Card c : cards) {
                 add(c);
             }
-            revalidate();
-            repaint();
+            refresh();
         }
     }
 
@@ -62,8 +60,7 @@ public class SolitaireDeck extends Deck {
 
     public Card removeFaceUpCard() {
         remove(faceUpStack.get(faceUpStack.size() - 1));
-        revalidate();
-        repaint();
+        refresh();
         return faceUpStack.remove(faceUpStack.size() - 1);
     }
 

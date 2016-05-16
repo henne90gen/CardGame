@@ -20,8 +20,7 @@ public class Player extends CardContainer {
 		int tmp = selectedCard;
 		selectedCard = -1;
 		remove(cards.get(tmp));
-		revalidate();
-		repaint();
+		refresh();
 		return cards.remove(tmp);
 	}
 	

@@ -54,8 +54,7 @@ public class SolitairePlayer extends Player {
 			for (int i = stacks[stack].size() - 1; i >= 0; i--) {
 				add(stacks[stack].get(i));
 			}
-			revalidate();
-			repaint();
+			refresh();
 		}
 	}
 	

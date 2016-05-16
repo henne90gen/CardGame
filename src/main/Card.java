@@ -171,15 +171,13 @@ public class Card extends JComponent implements MouseListener {
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		setMouseHover(true);
-		getParent().revalidate();
-		getParent().repaint();
+		((CardContainer) getParent()).refresh();
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
 		setMouseHover(false);
-		getParent().revalidate();
-		getParent().repaint();
+		((CardContainer) getParent()).refresh();
 	}
 
 	@Override
