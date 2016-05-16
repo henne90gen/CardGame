@@ -9,7 +9,7 @@ import org.junit.Test;
 public class SolitaireDeckTest {
     @Before
     public void setUp() throws Exception {
-
+        // stuff
     }
 
     @Test
