@@ -1,6 +1,6 @@
 package main;
 
-import mau.MauBoard;
+import mau.MauDeck;
 import mau.MauPlayer;
 import solitaire.SolitaireBoard;
 import solitaire.SolitaireDeck;
@@ -183,22 +183,22 @@ public class Card extends JComponent implements MouseListener {
 	@Override
 	public void mousePressed(MouseEvent e) {
         e.translatePoint((int)this.getLocation().getX(), (int)this.getLocation().getY());
-		if (getParent().getClass() == Deck.class) {
+		if (getParent().getClass() == Deck.class) { // Deck
 			((Deck)getParent()).mousePressed(e);
-		} else if (getParent().getClass() == SolitaireDeck.class) {
-			((SolitaireDeck)getParent()).mousePressed(e);
-		} else if (getParent().getClass() == GenericPlayer.class) {
+		} else if (getParent().getClass() == SolitaireDeck.class) { // SolitaireDeck
+			((SolitaireDeck) getParent()).mousePressed(e);
+		} else if (getParent().getClass() == MauDeck.class) { // MauDeck
+			((MauDeck) getParent()).mousePressed(e);
+		} else if (getParent().getClass() == GenericPlayer.class) { // GenericPlayer
 			((GenericPlayer)getParent()).mousePressed(e);
-		} else if (getParent().getClass() == SolitairePlayer.class) {
+		} else if (getParent().getClass() == SolitairePlayer.class) { // SolitairePlayer
 			((SolitairePlayer)getParent()).mousePressed(e);
-		} else if (getParent().getClass() == MauPlayer.class) {
+		} else if (getParent().getClass() == MauPlayer.class) { // MauPlayer
 			((MauPlayer)getParent()).mousePressed(e);
-		} else if (getParent().getClass() == GenericBoard.class) {
+		} else if (getParent().getClass() == GenericBoard.class) { // GenericBoard
 			((GenericBoard)getParent()).mousePressed(e);
-		} else if (getParent().getClass() == SolitaireBoard.class) {
+		} else if (getParent().getClass() == SolitaireBoard.class) { // SolitaireBoard
 			((SolitaireBoard)getParent()).mousePressed(e);
-		} else if (getParent().getClass() == MauBoard.class) {
-			((MauBoard)getParent()).mousePressed(e);
 		}
 	}
 

@@ -54,16 +54,6 @@ public class SolitaireDeck extends Deck {
         }
     }
 
-    public Card getFaceUpCard() {
-        return (faceUpStack.size() == 0)?null:faceUpStack.get(faceUpStack.size() - 1);
-    }
-
-    public Card removeFaceUpCard() {
-        remove(faceUpStack.get(faceUpStack.size() - 1));
-        refresh();
-        return faceUpStack.remove(faceUpStack.size() - 1);
-    }
-
     @Override
     public void mousePressed(MouseEvent e) {
         if (e.getX() > 2 * border + Card.WIDTH) {

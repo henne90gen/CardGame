@@ -1,10 +1,10 @@
 package main;
 
-import solitaire.Solitaire;
+import mau.Mau;
 
 public class Main {
 
 	public static void main(String[] args) {
-		new Solitaire();
+		new Mau();
 	}
 }

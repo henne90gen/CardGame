@@ -12,7 +12,6 @@ public abstract class Game implements ActionListener {
 
 	protected Window window;
 	protected GridBagConstraints gbc;
-	protected Deck deck;
 	
 	public Game(String name) {
 		window = new Window(name, this);
@@ -26,4 +25,10 @@ public abstract class Game implements ActionListener {
 	public abstract Board getBoard();
 
 	public abstract Deck getDeck();
+
+	public abstract void resetPlayer();
+
+	public abstract void resetBoard();
+
+	public abstract void resetDeck();
 }
