@@ -166,12 +166,21 @@ public class SolitaireBoard extends Board {
             if (c.getSuit() == tmp.getSuit() && c.getValue() == tmp.getValue()) {
                 for (int i = 0; i < stacks.length; i++) {
                     if (stacks[i].size() != 0) {
-                        tmp = stacks[i].get(stacks[i].size() - 1);
-                        if (areCompatible(tmp, c)) {
+						boolean isSameStack = false;
+						for (int j = 0; j < stacks[i].size(); j++) {
+							tmp = stacks[i].get(j);
+							if (c.getSuit() == tmp.getSuit() && c.getValue() == tmp.getValue()) {
+								isSameStack = true;
+							}
+						}
+						tmp = stacks[i].get(stacks[i].size() - 1);
+                        if (areCompatible(tmp, c) && !isSameStack) {
                             addCard(removeSelectedCards(), i);
+							return;
                         }
                     } else if (c.getValue() == 12) {
                         addCard(removeSelectedCards(), i);
+						return;
                     }
                 }
             }
