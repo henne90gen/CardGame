@@ -66,6 +66,14 @@ public class SolitairePlayer extends Player {
 		return stacks[selectedCard].get(stacks[selectedCard].size() - 1);
 	}
 
+	@Override
+	public Card removeSelectedCard() {
+		if (selectedCard == -1) {
+			return null;
+		}
+		return stacks[selectedCard].remove(stacks[selectedCard].size() - 1);
+	}
+
 	public Card getCard(int suit) {
 		return stacks[suit].get(stacks[suit].size() - 1);
 	}
