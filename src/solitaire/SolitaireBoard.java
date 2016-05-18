@@ -92,7 +92,7 @@ public class SolitaireBoard extends Board {
 		for (int i = 0; i < stacks.length; i++) {
 			for (int j = 0; j < stacks[i].size(); j++) {
 				int x = border + i * (Card.WIDTH + border);
-				int y = (int)(border + j * (border * 1.5f));
+				int y = (int)(border + j * (border * 1.75f));
                 if (j == stacks[i].size() - 1 && !initiating) {
                     stacks[i].get(j).setFaceUp(true);
 				}

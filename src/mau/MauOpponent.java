@@ -1,5 +1,6 @@
 package mau;
 
+import main.Card;
 import main.Player;
 
 import java.awt.*;
@@ -23,5 +24,19 @@ public class MauOpponent extends Player {
             cards.get(i).setFaceUp(false);
             cards.get(i).setLocation(border, border);
         }
+    }
+
+    public Card getCard(int id) {
+        if (id < cards.size()) return cards.get(id);
+        else return null;
+    }
+
+    public Card removeCard(int id) {
+        if (id < cards.size()) {
+            Card c = cards.remove(id);
+            remove(c);
+            refresh();
+            return c;
+        } else return null;
     }
 }

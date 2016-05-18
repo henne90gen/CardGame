@@ -139,7 +139,7 @@ public class Solitaire extends Game implements ActionListener {
 		m_player.setActionCommand(PLAYER_TO_BOARD);
 		gbc = new GridBagConstraints();
 		gbc.gridx = 0;
-		gbc.gridy = 2;
+		gbc.gridy = 1;
 		gbc.weightx = 1;
 		gbc.weighty = 1;
 		gbc.anchor = GridBagConstraints.PAGE_END;
@@ -155,7 +155,7 @@ public class Solitaire extends Game implements ActionListener {
 		m_board.setActionCommand(BOARD_TO_PLAYER);
 		gbc = new GridBagConstraints();
 		gbc.gridx = 0;
-		gbc.gridy = 1;
+		gbc.gridy = 0;
 		gbc.weightx = 1;
 		gbc.weighty = 1;
 		gbc.anchor = GridBagConstraints.PAGE_START;
@@ -171,10 +171,10 @@ public class Solitaire extends Game implements ActionListener {
 		m_deck.setActionCommand(DECK_TO_BOARD);
 		gbc = new GridBagConstraints();
 		gbc.gridx = 1;
-		gbc.gridy = 2;
+		gbc.gridy = 0;
 		gbc.weightx = 1;
 		gbc.weighty = 1;
-		gbc.anchor = GridBagConstraints.LINE_END;
+		gbc.anchor = GridBagConstraints.PAGE_START;
 		window.add(m_deck, gbc);
 	}
 }

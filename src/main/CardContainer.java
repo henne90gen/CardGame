@@ -66,7 +66,11 @@ public class CardContainer extends JPanel implements MouseListener {
 	public double getMaxCardsX() {
 		return maxCardsX;
 	}
-	
+
+	public int getNumCards() {
+		return cards.size();
+	}
+
 	protected Dimension getDimension() { return new Dimension(0, 0); }
 	
 	@Override

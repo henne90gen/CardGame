@@ -1,5 +1,6 @@
 package mau;
 
+import main.Board;
 import main.Card;
 import main.Game;
 
@@ -16,7 +17,6 @@ public class Mau extends Game implements ActionListener {
 
 	private MauDeck m_deck;
 	private MauPlayer m_player;
-
 	private ArrayList<MauOpponent> opponents;
 
 	public Mau() {
@@ -27,61 +27,93 @@ public class Mau extends Game implements ActionListener {
 	protected void resetGame() {
 		resetOpponents();
 
-		resetDeck();
-		getDeck().shuffle();
-
 		resetPlayer();
-		
+
+		resetDeck();
+		m_deck.shuffle();
+
 		for (int i = 0; i < 5; i++) {
-			getPlayer().addCard(m_deck.dealCard());
+			m_player.addCard(m_deck.dealCard());
 		}
 		for (int i= 0; i < opponents.size(); i++) {
-			for (int j = 0; j < 5; j++) opponents.get(i).addCard(getDeck().dealCard());
+			for (int j = 0; j < 5; j++) opponents.get(i).addCard(m_deck.dealCard());
 		}
-		getDeck().playCard(getDeck().dealCard());
+		m_deck.playCard(m_deck.dealCard());
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
 			case DECK_TO_PLAYER:
-				m_player.addCard(m_deck.dealCard());
+				Card tmp = m_deck.dealCard();
+				m_player.addCard(tmp);
+				System.out.println("Player drew " + tmp.getValueAsString() + " of " + tmp.getSuit().toString());
+				playOpponent(0);
 				break;
 			case PLAYER_TO_BOARD:
 				Card pCard = m_player.getSelectedCard();
 				Card bCard = m_deck.getFaceUpCard();
-				if (pCard.getValue() == bCard.getValue() || pCard.getSuit() == bCard.getSuit()) {
+				if (m_deck.areCompatible(bCard, pCard)) {
+					System.out.println("Player played " + pCard.getValueAsString() + " of " + pCard.getSuit().toString());
 					m_deck.playCard(m_player.removeSelectedCard());
+					if (m_player.getNumCards() > 0) playOpponent(0);
 				}
-				break;
-			case SKIP_NEXT_PLAYER:
-
-				break;
-			case DRAW_TWO_CARDS:
-				m_player.addCard(m_deck.dealCard());
-				m_player.addCard(m_deck.dealCard());
-				break;
-			case SWITCH_COLOR:
-
 				break;
 			default:
 				super.actionPerformed(e);
 		}
+		if (m_player.getNumCards() == 0) {
+			// TODO insert victory
+			System.out.println("Player won!");
+		}
 	}
 
-	@Override
-	public MauPlayer getPlayer() {
-		return m_player;
-	}
+	private void playOpponent(int id) {
+		MauOpponent op = opponents.get(id);
+		Card dc = m_deck.getFaceUpCard();
+		boolean canPlay = true;
+		switch (dc.getValue()) {
+			case 0:
+				canPlay = false;
+				break;
+			case 6:
+				op.addCard(m_deck.dealCard());
+				op.addCard(m_deck.dealCard());
+				canPlay = false;
+				break;
+			case 10:
 
-	@Override
-	public MauBoard getBoard() {
-		return null;
-	}
+				break;
+		}
 
-	@Override
-	public MauDeck getDeck() {
-		return m_deck;
+		if (canPlay) {
+			boolean playedACard = false;
+			if (op.getNumCards() > 0) {
+				for (int i = 0; i < op.getNumCards(); i++) {
+					Card tmp = op.getCard(i);
+					if (m_deck.areCompatible(dc, tmp)) {
+						System.out.println("Opponent " + id + " played " + tmp.getValueAsString() + " of " + tmp.getSuit().toString());
+						m_deck.playCard(op.removeCard(i));
+						if (id == opponents.size() - 1 && tmp.getValue() == 6) {
+							m_player.addCard(m_deck.dealCard());
+						}
+						playedACard = true;
+						break;
+					}
+				}
+				if (!playedACard) {
+					Card tmp = m_deck.dealCard();
+					op.addCard(tmp);
+					System.out.println("Opponent " + id + " drew " + tmp.getValueAsString() + " of " + tmp.getSuit().toString());
+				}
+			} else {
+				System.out.println("Opponent " + id + " won!");
+			}
+		}
+
+		if (id < opponents.size() - 1) {
+			playOpponent(++id);
+		}
 	}
 
 	private void resetOpponents() {
@@ -89,9 +121,8 @@ public class Mau extends Game implements ActionListener {
 			for (int i = 0; i < opponents.size(); i++) {
 				window.remove(opponents.get(i));
 			}
-		} else {
-			opponents = new ArrayList<MauOpponent>();
 		}
+		opponents = new ArrayList<MauOpponent>();
 		boolean correctNumber = false;
 		int numOfOpponents = 2;
 		/*
@@ -164,4 +195,19 @@ public class Mau extends Game implements ActionListener {
 
 	@Override
 	public void resetBoard() {}
+
+	@Override
+	public MauPlayer getPlayer() {
+		return m_player;
+	}
+
+	@Override
+	public Board getBoard() {
+		return null;
+	}
+
+	@Override
+	public MauDeck getDeck() {
+		return m_deck;
+	}
 }

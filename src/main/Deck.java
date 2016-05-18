@@ -20,12 +20,13 @@ public class Deck extends CardContainer {
 	
 	private DeckType type;
 	private Random rand;
-	protected ArrayList<Card> faceUpStack = new ArrayList<Card>();
+	protected ArrayList<Card> faceUpStack;
 	
 	public Deck(DeckType type) {
 		this.type = type;
 		rand = new Random();
 		border = 5;
+		faceUpStack = new ArrayList<Card>();
 		addMouseListener(this);
 		switch (type) {
 		case French:
@@ -84,9 +85,8 @@ public class Deck extends CardContainer {
 			remove(cards.get(cards.size() - 1));
 			refresh();
 			return cards.remove(cards.size() - 1);
-		} else {
-			return null;
 		}
+		return null;
 	}
 	
 	public void shuffle() {
