@@ -4,6 +4,8 @@ import main.Card;
 import main.Deck;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
 
 /**
  * Created by henne on 17.05.16.
@@ -41,6 +43,13 @@ public class MauDeck extends Deck {
                 add(faceUpStack.get(i));
             }
             refresh();
+        }
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        if (e.getPoint().getX() > 2 * border + Card.WIDTH) {
+            fireActionPerformed(new ActionEvent(MauDeck.this, 0, null));
         }
     }
 }

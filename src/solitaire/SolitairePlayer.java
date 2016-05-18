@@ -24,14 +24,14 @@ public class SolitairePlayer extends Player {
 		cards = null;
 		selectedCard = -1;
 		//suits = new Card[maxCardsX];
-		stacks = new ArrayList[maxCardsX];
+		stacks = new ArrayList[(int)maxCardsX];
 		for (int i = 0; i < stacks.length; i++) {
 			stacks[i] = new ArrayList();
 		}
 		addMouseListener(this);
 		try {
 			BufferedImage spriteSheet = ImageIO.read(new File("res/suit-icons.png"));
-			int width = spriteSheet.getWidth() / maxCardsX;
+			int width = (int) (spriteSheet.getWidth() / maxCardsX);
 			int height = spriteSheet.getHeight();
 			for (int i = 0; i < maxCardsX; i++) {
 				BufferedImage bi = new BufferedImage(width, height, spriteSheet.getType());

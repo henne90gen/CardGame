@@ -112,7 +112,7 @@ public class Deck extends CardContainer {
 	
 	@Override
 	protected Dimension getDimension() {
-		return new Dimension((Card.WIDTH + border) * maxCardsX + border, (Card.HEIGHT + border) * maxCardsY + border);
+		return new Dimension((int)((Card.WIDTH + border) * maxCardsX + border), (int)((Card.HEIGHT + border) * maxCardsY + border));
 	}
 	
 	@Override

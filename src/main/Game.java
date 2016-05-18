@@ -1,6 +1,7 @@
 package main;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public abstract class Game implements ActionListener {
@@ -17,7 +18,20 @@ public abstract class Game implements ActionListener {
 		window = new Window(name, this);
 		resetGame();
 	}
-	
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		switch (e.getActionCommand()) {
+			case Window.NEW_GAME:
+				resetGame();
+				break;
+			case Window.EXIT_GAME:
+				window.dispose();
+				System.exit(0);
+				break;
+		}
+	}
+
 	protected abstract void resetGame();
 
 	public abstract Player getPlayer();

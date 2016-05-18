@@ -2,7 +2,6 @@ package solitaire;
 
 import main.Card;
 import main.Game;
-import main.Window;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -27,9 +26,6 @@ public class Solitaire extends Game implements ActionListener {
 		resetPlayer();
 
 		resetBoard();
-
-
-		window.pack();
 
 		m_board.setInitiation(true);
 		for (int i = 0; i < m_board.getMaxCardsX(); i++) {
@@ -80,16 +76,8 @@ public class Solitaire extends Game implements ActionListener {
 					}
 				}
 				break;
-			case Window.NEW_GAME:
-				window.remove(m_deck);
-				window.remove(m_player);
-				window.remove(m_board);
-				resetGame();
-				break;
-			case Window.EXIT_GAME:
-				window.dispose();
-				System.exit(0);
-				break;
+			default:
+				super.actionPerformed(e);
 		}
 		if (m_board.canFinish()) {
 			autoFinishGame();

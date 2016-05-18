@@ -42,6 +42,8 @@ public class Window extends JFrame {
 		main.setSize(getSize());
 		main.setLayout(new GridBagLayout());
 		add(main);
+
+		pack();
 	}
 
 	public void refresh() {

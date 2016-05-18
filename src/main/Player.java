@@ -17,11 +17,11 @@ public class Player extends CardContainer {
 		if (selectedCard == -1) {
 			return null;
 		}
-		int tmp = selectedCard;
+		Card c = cards.remove(selectedCard);
 		selectedCard = -1;
-		remove(cards.get(tmp));
+		remove(c);
 		refresh();
-		return cards.remove(tmp);
+		return c;
 	}
 	
 	public Card getSelectedCard() {
@@ -32,6 +32,6 @@ public class Player extends CardContainer {
 	}
 	
 	protected Dimension getDimension() {
-		return new Dimension(Card.WIDTH * maxCardsX + border * (maxCardsX + 1), Card.HEIGHT + border * 2);
+		return new Dimension((int)(Card.WIDTH * maxCardsX + border * (maxCardsX + 1)), (int)(Card.HEIGHT + border * 2));
 	}
 }

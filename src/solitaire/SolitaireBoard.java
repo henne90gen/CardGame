@@ -15,9 +15,9 @@ public class SolitaireBoard extends Board {
 	public SolitaireBoard() {
 		border = 10;
 		maxCardsX = 7;
-		maxCardsY = 3;
+		maxCardsY = 3.5f;
 		cards = null;
-		stacks = new ArrayList[maxCardsX];
+		stacks = new ArrayList[(int)maxCardsX];
 		addMouseListener(this);
 		for (int i = 0; i < stacks.length; i++) {
 			stacks[i] = new ArrayList<Card>();
@@ -142,7 +142,7 @@ public class SolitaireBoard extends Board {
 	}
 
 	protected Dimension getDimension() {
-		return new Dimension(Card.WIDTH * maxCardsX + border * (maxCardsX + 1), Card.HEIGHT * maxCardsY + border * (maxCardsY + 1));
+		return new Dimension((int)(Card.WIDTH * maxCardsX + border * (maxCardsX + 1)), (int)(Card.HEIGHT * maxCardsY + border * (maxCardsY + 1)));
 	}
 
     public boolean areCompatible(Card current, Card incoming) {

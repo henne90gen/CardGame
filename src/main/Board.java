@@ -1,8 +1,6 @@
 package main;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
+import java.awt.*;
 
 public class Board extends CardContainer {
 	
@@ -16,7 +14,7 @@ public class Board extends CardContainer {
 	}
 	
 	protected Dimension getDimension() {
-		return new Dimension(Card.WIDTH * maxCardsX + border * (maxCardsX + 1), Card.HEIGHT * maxCardsY + border * (maxCardsY + 1));
+		return new Dimension((int)(Card.WIDTH * maxCardsX + border * (maxCardsX + 1)), (int)(Card.HEIGHT * maxCardsY + border * (maxCardsY + 1)));
 	}
 
 	public void setInitiation(boolean state) {

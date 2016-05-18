@@ -10,7 +10,8 @@ import java.util.ArrayList;
 
 public class CardContainer extends JPanel implements MouseListener {
 	
-	protected int maxCardsX, maxCardsY, border;
+	protected float maxCardsX, maxCardsY;
+	protected int border;
 	protected String actionCommand;
 	protected ArrayList<Card> cards = new ArrayList<Card>();
 	
@@ -62,7 +63,7 @@ public class CardContainer extends JPanel implements MouseListener {
 		}
 	}
 	
-	public int getMaxCardsX() {
+	public double getMaxCardsX() {
 		return maxCardsX;
 	}
 	
