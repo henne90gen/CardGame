@@ -30,7 +30,11 @@ public class Player extends CardContainer {
 		}
 		return cards.get(selectedCard);
 	}
-	
+
+	public void setSelectedCard(int i) {
+		selectedCard = i;
+	}
+
 	protected Dimension getDimension() {
 		return new Dimension((int)(Card.WIDTH * maxCardsX + border * (maxCardsX + 1)), (int)(Card.HEIGHT + border * 2));
 	}

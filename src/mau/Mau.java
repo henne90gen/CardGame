@@ -1,9 +1,11 @@
 package mau;
 
+import log.Log;
 import main.Board;
 import main.Card;
 import main.Game;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,27 +13,33 @@ import java.util.ArrayList;
 
 public class Mau extends Game implements ActionListener {
 
-	public static final String DRAW_TWO_CARDS = "Draw two cards";
-	public static final String SKIP_NEXT_PLAYER = "Skip next player";
-	public static final String SWITCH_COLOR = "Switch color";
+	public static final String PREFIX = "MauMau";
 
 	private MauDeck m_deck;
 	private MauPlayer m_player;
 	private ArrayList<MauOpponent> opponents;
 
+	private boolean cardEffectsNextPlayer;
+	private int cardsToDrawForNextPlayer;
+
 	public Mau() {
-		super("MauMau");
+		super(PREFIX);
 	}
 
 	@Override
 	protected void resetGame() {
+		cardEffectsNextPlayer = true;
+		cardsToDrawForNextPlayer = 0;
+
 		resetOpponents();
 
 		resetPlayer();
 
 		resetDeck();
-		m_deck.shuffle();
 
+		Log.setVerbosity(false);
+
+		m_deck.shuffle();
 		for (int i = 0; i < 5; i++) {
 			m_player.addCard(m_deck.dealCard());
 		}
@@ -39,6 +47,8 @@ public class Mau extends Game implements ActionListener {
 			for (int j = 0; j < 5; j++) opponents.get(i).addCard(m_deck.dealCard());
 		}
 		m_deck.playCard(m_deck.dealCard());
+
+		Log.setVerbosity(true);
 	}
 
 	@Override
@@ -47,15 +57,44 @@ public class Mau extends Game implements ActionListener {
 			case DECK_TO_PLAYER:
 				Card tmp = m_deck.dealCard();
 				m_player.addCard(tmp);
-				System.out.println("Player drew " + tmp.getValueAsString() + " of " + tmp.getSuit().toString());
 				playOpponent(0);
 				break;
 			case PLAYER_TO_BOARD:
 				Card pCard = m_player.getSelectedCard();
-				Card bCard = m_deck.getFaceUpCard();
-				if (m_deck.areCompatible(bCard, pCard)) {
-					System.out.println("Player played " + pCard.getValueAsString() + " of " + pCard.getSuit().toString());
+				Card dCard = m_deck.getFaceUpCard();
+
+				if (cardEffectsNextPlayer && dCard.getValue() == 6) {
+					boolean playedCard = false;
+					for (int i = 0; i < m_player.getNumCards(); i++) {
+						m_player.setSelectedCard(i);
+						pCard = m_player.getSelectedCard();
+						if (pCard.getValue() == 6) {
+							Log.w(PREFIX, "Player played " + pCard.getValueAsString() + " of " + pCard.getSuit().toString());
+							m_deck.playCard(m_player.removeSelectedCard());
+							playedCard = true;
+							cardsToDrawForNextPlayer += 2;
+							cardEffectsNextPlayer = true;
+							Log.w(PREFIX, "Player increased the number of cards to draw to " + cardsToDrawForNextPlayer);
+							if (m_player.getNumCards() > 0) playOpponent(0);
+							break;
+						}
+					}
+					if (!playedCard) {
+						for (int i = 0; i < cardsToDrawForNextPlayer; i++) {
+							m_player.addCard(m_deck.dealCard());
+						}
+						cardsToDrawForNextPlayer = 0;
+						cardEffectsNextPlayer = false;
+						if (m_player.getNumCards() > 0) playOpponent(0);
+					}
+				} else if (m_deck.areCompatible(dCard, pCard)) {
+					Log.w(PREFIX, "Player played " + pCard.getValueAsString() + " of " + pCard.getSuit().toString());
 					m_deck.playCard(m_player.removeSelectedCard());
+					cardEffectsNextPlayer = true;
+					if (pCard.getValue() == 6) {
+						cardsToDrawForNextPlayer += 2;
+						Log.w(PREFIX, "Player increased the number of cards to draw to " + cardsToDrawForNextPlayer);
+					}
 					if (m_player.getNumCards() > 0) playOpponent(0);
 				}
 				break;
@@ -64,59 +103,87 @@ public class Mau extends Game implements ActionListener {
 		}
 		if (m_player.getNumCards() == 0) {
 			// TODO insert victory
-			System.out.println("Player won!");
+			Log.w(PREFIX, "Player won!");
 		}
 	}
 
 	private void playOpponent(int id) {
+		Log.w(PREFIX, "Opponent " + id + "'s turn");
 		MauOpponent op = opponents.get(id);
 		Card dc = m_deck.getFaceUpCard();
 		boolean canPlay = true;
-		switch (dc.getValue()) {
-			case 0:
-				canPlay = false;
-				break;
-			case 6:
-				op.addCard(m_deck.dealCard());
-				op.addCard(m_deck.dealCard());
-				canPlay = false;
-				break;
-			case 10:
-
-				break;
+		if (cardEffectsNextPlayer) {
+			cardEffectsNextPlayer = false;
+			switch (dc.getValue()) {
+				case 0:
+					canPlay = false;
+					Log.w(PREFIX, "Opponent " + id + " is skipped");
+					break;
+				case 6:
+					boolean playedSeven = false;
+					for (int i = 0; i < op.getNumCards(); i++) {
+						if (op.getCard(i).getValue() == 6) {
+							Log.w(PREFIX, "Opponent " + id + " played " + op.getCard(i).getValueAsString() + " of " + op.getCard(i).getSuit().toString());
+							m_deck.playCard(op.removeCard(i));
+							cardEffectsNextPlayer = true;
+							cardsToDrawForNextPlayer += 2;
+							Log.w(PREFIX, "Opponent " + id + " increased the number of cards to draw to " + cardsToDrawForNextPlayer);
+							playedSeven = true;
+						}
+					}
+					if (!playedSeven) {
+						for (int i = 0; i < cardsToDrawForNextPlayer; i++) {
+							op.addCard(m_deck.dealCard(), id);
+						}
+						cardsToDrawForNextPlayer = 0;
+						cardEffectsNextPlayer = false;
+					}
+					canPlay = false;
+					break;
+			}
 		}
 
 		if (canPlay) {
-			boolean playedACard = false;
+			boolean playedCard = false;
 			if (op.getNumCards() > 0) {
 				for (int i = 0; i < op.getNumCards(); i++) {
 					Card tmp = op.getCard(i);
 					if (m_deck.areCompatible(dc, tmp)) {
-						System.out.println("Opponent " + id + " played " + tmp.getValueAsString() + " of " + tmp.getSuit().toString());
+						Log.w(PREFIX, "Opponent " + id + " played " + tmp.getValueAsString() + " of " + tmp.getSuit().toString());
 						m_deck.playCard(op.removeCard(i));
-						if (id == opponents.size() - 1 && tmp.getValue() == 6) {
-							m_player.addCard(m_deck.dealCard());
+						cardEffectsNextPlayer = true;
+						if (tmp.getValue() == 6) {
+							cardsToDrawForNextPlayer += 2;
+							Log.w(PREFIX, "Opponent " + id + " increased the number of cards to draw to " + cardsToDrawForNextPlayer);
+						} else if (id == opponents.size() - 1 && tmp.getValue() == 0) {
+							id = -1;
+							cardEffectsNextPlayer = false;
+							Log.w(PREFIX, "Player is skipped");
 						}
-						playedACard = true;
+						playedCard = true;
 						break;
 					}
 				}
-				if (!playedACard) {
+				if (!playedCard) {
 					Card tmp = m_deck.dealCard();
-					op.addCard(tmp);
-					System.out.println("Opponent " + id + " drew " + tmp.getValueAsString() + " of " + tmp.getSuit().toString());
+					op.addCard(tmp, id);
 				}
-			} else {
-				System.out.println("Opponent " + id + " won!");
 			}
+		}
+
+		if (op.getNumCards() == 0) {
+			Log.w(PREFIX, "Opponent " + id + " won!");
+			return;
 		}
 
 		if (id < opponents.size() - 1) {
 			playOpponent(++id);
+		} else {
+			Log.w(PREFIX, "Player's turn");
 		}
 	}
 
-	private void resetOpponents() {
+	public void resetOpponents() {
 		if (opponents != null) {
 			for (int i = 0; i < opponents.size(); i++) {
 				window.remove(opponents.get(i));
@@ -125,12 +192,12 @@ public class Mau extends Game implements ActionListener {
 		opponents = new ArrayList<MauOpponent>();
 		boolean correctNumber = false;
 		int numOfOpponents = 2;
-		/*
+
 		while (!correctNumber) {
 			String s = "";
-			s = (String) JOptionPane.showInputDialog("Number of opponents (1-5):");
-			if(!s.isEmpty()) {
-				for(int i = 0; i < s.length(); i++) {
+			s = JOptionPane.showInputDialog("Number of opponents (1-5):");
+			if (!s.isEmpty()) {
+				for (int i = 0; i < s.length(); i++) {
 					if (i == 0 && s.charAt(i) == '-') {
 						if (s.length() != 1) {
 							break;
@@ -143,7 +210,7 @@ public class Mau extends Game implements ActionListener {
 			}
 			numOfOpponents = new Integer(s);
 		}
-		*/
+
 		for (int i = 0; i < numOfOpponents; i++) {
 			MauOpponent opponent = new MauOpponent();
 			gbc = new GridBagConstraints();
@@ -200,6 +267,8 @@ public class Mau extends Game implements ActionListener {
 	public MauPlayer getPlayer() {
 		return m_player;
 	}
+
+	public MauOpponent getOpponent(int id) { return opponents.get(id); }
 
 	@Override
 	public Board getBoard() {

@@ -35,7 +35,7 @@ public class MauDeck extends Deck {
     }
 
     public boolean areCompatible(Card current, Card incoming) {
-        return ((current.getSuit() == incoming.getSuit()) || (current.getValue() == incoming.getValue()));
+        return ((current.getSuit() == incoming.getSuit()) || (current.getValue() == incoming.getValue()) || (incoming.getValue() == 10));
     }
 
     @Override

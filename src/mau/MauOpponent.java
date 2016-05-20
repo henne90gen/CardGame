@@ -1,9 +1,12 @@
 package mau;
 
+import log.Log;
 import main.Card;
 import main.Player;
 
 import java.awt.*;
+
+import static mau.Mau.PREFIX;
 
 /**
  * Created by henne on 17.05.16.
@@ -38,5 +41,10 @@ public class MauOpponent extends Player {
             refresh();
             return c;
         } else return null;
+    }
+
+    public void addCard(Card card, int id) {
+        super.addCard(card);
+        Log.w(PREFIX, "Opponent " + id + " drew " + card.getValueAsString() + " of " + card.getSuit().toString());
     }
 }

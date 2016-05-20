@@ -1,11 +1,14 @@
 package mau;
 
+import log.Log;
 import main.Card;
 import main.Player;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
+
+import static mau.Mau.PREFIX;
 
 public class MauPlayer extends Player {
 	
@@ -43,4 +46,10 @@ public class MauPlayer extends Player {
 		}
         fireActionPerformed(new ActionEvent(MauPlayer.this, 0, null));
     }
+
+	@Override
+	public void addCard(Card card) {
+		super.addCard(card);
+		Log.w(PREFIX, "Player drew " + card.getValueAsString() + " of " + card.getSuit().toString());
+	}
 }
