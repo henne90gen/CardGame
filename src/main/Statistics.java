@@ -1,11 +1,11 @@
-package solitaire;
+package main;
 
 import javax.swing.*;
 
 /**
  * Created by Henne on 5/20/2016.
  */
-public class Statistics implements Runnable {
+public class Statistics extends JPanel implements Runnable {
 
     private int m_moves;
     private long m_time;
@@ -14,11 +14,18 @@ public class Statistics implements Runnable {
     private boolean m_paused;
 
     private JLabel m_timeLabel;
+    private JLabel m_moveLabel;
 
     public Statistics() {
         m_moves = 0;
         m_time = 0;
+
         m_timeLabel = new JLabel();
+        add(m_timeLabel);
+
+        m_moveLabel = new JLabel(new Integer(m_moves).toString());
+        add(m_moveLabel);
+
         startTimer();
     }
 
@@ -28,6 +35,7 @@ public class Statistics implements Runnable {
 
     public void addMove() {
         m_moves++;
+        m_moveLabel.setText(new Integer(m_moves).toString());
     }
 
     public long getTime() {
@@ -35,7 +43,7 @@ public class Statistics implements Runnable {
     }
 
     /**
-     * Starts or restarts the m_timer
+     * Starts or restarts the timer
      */
     public synchronized void startTimer() {
         if (m_timer != null && m_timer.isAlive()) {
@@ -70,8 +78,22 @@ public class Statistics implements Runnable {
         m_paused = false;
         while (m_running) {
             if (!m_paused) m_time = System.nanoTime() - startTime;
-            m_timeLabel.setText(new Long(m_time / 100000000).toString());
-            try { Thread.sleep(100); } catch (InterruptedException e) { e.printStackTrace(); }
+            updateTimeLabel();
+            try { Thread.sleep(1000); } catch (InterruptedException e) { e.printStackTrace(); }
         }
+    }
+
+    private synchronized void updateTimeLabel() {
+        long secondsLong = m_time / 1000000000;
+        long minutesLong = 0;
+        if (secondsLong > 59) {
+            minutesLong = secondsLong / 60;
+            secondsLong = secondsLong % 60;
+        }
+        String secondsString = new Long(secondsLong).toString() + "s";
+        String minutesString = new Long(minutesLong).toString() + "min";
+        String text = (minutesLong != 0)?(minutesString + " "):("");
+        text += secondsString;
+        m_timeLabel.setText(text);
     }
 }

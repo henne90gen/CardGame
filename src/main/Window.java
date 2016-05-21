@@ -2,6 +2,7 @@ package main;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
@@ -11,9 +12,11 @@ public class Window extends JFrame {
 	public final static String EXIT_GAME = "Exit";
 
 	private JPanel main;
+	private ActionListener m_listener;
 	
 	public Window(String name, ActionListener listener) {
 		super(name);
+		m_listener = listener;
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setPreferredSize(new Dimension(1080, 1080 * 9 / 16));
 		setMinimumSize(getPreferredSize());
@@ -56,13 +59,20 @@ public class Window extends JFrame {
 		});
 	}
 
+	@Override
+	public void dispose() {
+		super.dispose();
+		setVisible(false);
+		m_listener.actionPerformed(new ActionEvent(Window.this, 0, EXIT_GAME));
+	}
+
 	public void add(CardContainer c, GridBagConstraints gbc) {
 		main.add(c, gbc);
 		refresh();
 	}
 
-	public void add(JLabel l, GridBagConstraints gbc) {
-		main.add(l, gbc);
+	public void add(JPanel p, GridBagConstraints gbc) {
+		main.add(p, gbc);
 		refresh();
 	}
 	
@@ -70,5 +80,5 @@ public class Window extends JFrame {
 		main.remove(c);
 	}
 
-	public void remove(JLabel l) { main.remove(l); }
+	public void remove(JPanel p) { main.remove(p); }
 }

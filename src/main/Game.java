@@ -12,6 +12,7 @@ public abstract class Game implements ActionListener {
 	public final static String PLAYER_TO_BOARD = "player to board";
 
 	protected Window window;
+	protected Statistics stats;
 	protected GridBagConstraints gbc;
 	
 	public Game(String name) {
@@ -23,16 +24,23 @@ public abstract class Game implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
 			case Window.NEW_GAME:
+				stats.stopTimer();
 				resetGame();
 				break;
 			case Window.EXIT_GAME:
-				window.dispose();
-				System.exit(0);
+				stats.stopTimer();
+				if (window.isVisible()) window.dispose();
+				else System.exit(0);
 				break;
 		}
 	}
 
-	protected abstract void resetGame();
+	protected void resetGame() {
+		resetStatistics();
+		resetDeck();
+		resetPlayer();
+		resetBoard();
+	}
 
 	public abstract Player getPlayer();
 
@@ -40,9 +48,15 @@ public abstract class Game implements ActionListener {
 
 	public abstract Deck getDeck();
 
+	public Statistics getStatistics() {
+		return stats;
+	}
+
 	public abstract void resetPlayer();
 
 	public abstract void resetBoard();
 
 	public abstract void resetDeck();
+
+	public abstract void resetStatistics();
 }

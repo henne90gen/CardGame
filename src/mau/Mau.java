@@ -261,6 +261,11 @@ public class Mau extends Game implements ActionListener {
 	}
 
 	@Override
+	public void resetStatistics() {
+
+	}
+
+	@Override
 	public void resetBoard() {}
 
 	@Override
