@@ -60,8 +60,15 @@ public class Window extends JFrame {
 		main.add(c, gbc);
 		refresh();
 	}
+
+	public void add(JLabel l, GridBagConstraints gbc) {
+		main.add(l, gbc);
+		refresh();
+	}
 	
 	public void remove(CardContainer c) {
 		main.remove(c);
 	}
+
+	public void remove(JLabel l) { main.remove(l); }
 }

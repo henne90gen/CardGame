@@ -58,6 +58,7 @@ public class SolitaireDeck extends Deck {
     public void mousePressed(MouseEvent e) {
         if (e.getX() > 2 * border + Card.WIDTH) {
             showNextCard();
+            fireActionPerformed(new ActionEvent(SolitaireDeck.this, 0, Solitaire.ADD_MOVE));
         } else if (e.getX() < border + Card.WIDTH) {
             fireActionPerformed(new ActionEvent(SolitaireDeck.this, 0, null));
         }

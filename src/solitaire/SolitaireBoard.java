@@ -176,10 +176,12 @@ public class SolitaireBoard extends Board {
 						tmp = stacks[i].get(stacks[i].size() - 1);
                         if (areCompatible(tmp, c) && !isSameStack) {
                             addCard(removeSelectedCards(), i);
+							fireActionPerformed(new ActionEvent(SolitaireBoard.this, 0, Solitaire.ADD_MOVE));
 							return;
                         }
                     } else if (c.getValue() == 12) {
                         addCard(removeSelectedCards(), i);
+						fireActionPerformed(new ActionEvent(SolitaireBoard.this, 0, Solitaire.ADD_MOVE));
 						return;
                     }
                 }
