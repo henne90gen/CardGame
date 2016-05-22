@@ -25,7 +25,7 @@ public class Solitaire extends Game {
 	protected void resetGame() {
 		super.resetGame();
 
-		getDeck().shuffle();
+		m_deck.shuffle();
 		m_board.setInitiation(true);
 		for (int i = 0; i < m_board.getMaxCardsX(); i++) {
 			for (int j = 0; j < i + 1; j++) {
@@ -116,7 +116,11 @@ public class Solitaire extends Game {
 				}
 			}
 			if (m_deck.getFaceUpCard() != null) {
+				Card c = m_deck.getFaceUpCard();
 				actionPerformed(new ActionEvent(Solitaire.this, 0, DECK_TO_BOARD));
+				if (c.getSuit() == m_deck.getFaceUpCard().getSuit() && c.getValue() == m_deck.getFaceUpCard().getValue()) {
+					m_deck.showNextCard();
+				}
 			} else {
 				m_deck.showNextCard();
 				stats.addMove();
@@ -190,7 +194,7 @@ public class Solitaire extends Game {
 	@Override
 	public void resetStatistics() {
 		if (stats != null) window.remove(stats);
-		stats = new Statistics();
+		stats = new Statistics(PREFIX);
 		gbc = new GridBagConstraints();
 		gbc.gridx = 1;
 		gbc.gridy = 1;
