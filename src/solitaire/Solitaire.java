@@ -107,6 +107,7 @@ public class Solitaire extends Game {
 	}
 
 	public void autoFinishGame() {
+		m_board.setFinishing(true);
 		while (!m_player.gameIsFinished()) {
 			for (int i = 0; i < m_board.getMaxCardsX(); i++) {
 				Card c = m_board.getTopCard(i);
@@ -118,8 +119,9 @@ public class Solitaire extends Game {
 			if (m_deck.getFaceUpCard() != null) {
 				Card c = m_deck.getFaceUpCard();
 				actionPerformed(new ActionEvent(Solitaire.this, 0, DECK_TO_BOARD));
-				if (c.getSuit() == m_deck.getFaceUpCard().getSuit() && c.getValue() == m_deck.getFaceUpCard().getValue()) {
+				if (m_deck.getFaceUpCard() == null || (c.getSuit() == m_deck.getFaceUpCard().getSuit() && c.getValue() == m_deck.getFaceUpCard().getValue())) {
 					m_deck.showNextCard();
+					stats.addMove();
 				}
 			} else {
 				m_deck.showNextCard();

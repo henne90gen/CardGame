@@ -48,4 +48,40 @@ public class SolitaireTest {
         }
     }
 
+    @Test
+    public void autoFinishGameWithCardsOnDeck() throws Exception {
+        for (int j = 0; j < 50; j++) {
+            solitaire = new Solitaire();
+            solitaire.resetDeck();
+            solitaire.resetBoard();
+
+            for (int i = 13; i >= 0; i--) {
+                solitaire.getBoard().addCard(solitaire.getDeck().getCard((i % 2 == 0) ? Card.Suit.Diamonds : Card.Suit.Clubs, i), 0);
+            }
+            for (int i = 13; i >= 0; i--) {
+                solitaire.getBoard().addCard(solitaire.getDeck().getCard((i % 2 == 0) ? Card.Suit.Clubs : Card.Suit.Diamonds, i), 1);
+            }
+
+            for (int i = 13; i >= 9; i--) {
+                solitaire.getBoard().addCard(solitaire.getDeck().getCard((i % 2 == 0) ? Card.Suit.Hearts : Card.Suit.Spades, i), 2);
+            }
+            for (int i = 6; i >= 0; i--) {
+                solitaire.getBoard().addCard(solitaire.getDeck().getCard((i % 2 == 0) ? Card.Suit.Hearts : Card.Suit.Spades, i), 5);
+            }
+
+            for (int i = 13; i >= 10; i--) {
+                solitaire.getBoard().addCard(solitaire.getDeck().getCard((i % 2 == 0) ? Card.Suit.Spades : Card.Suit.Hearts, i), 3);
+            }
+            for (int i = 5; i >= 0; i--) {
+                solitaire.getBoard().addCard(solitaire.getDeck().getCard((i % 2 == 0) ? Card.Suit.Spades : Card.Suit.Hearts, i), 4);
+            }
+
+            solitaire.getDeck().shuffle();
+            solitaire.autoFinishGame();
+
+            for (int i = 0; i < 4; i++) {
+                assert solitaire.getPlayer().getCard(i).getValue() == 12 : solitaire.getPlayer().getCard(i).getValue();
+            }
+        }
+    }
 }

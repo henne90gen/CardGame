@@ -11,7 +11,8 @@ import java.util.ArrayList;
 public class SolitaireBoard extends Board {
 
 	private ArrayList<Card>[] stacks;
-	
+	private boolean m_finishing = false;
+
 	public SolitaireBoard() {
 		border = 10;
 		maxCardsX = 7;
@@ -213,8 +214,12 @@ public class SolitaireBoard extends Board {
                 }
             }
         }
-        return true;
+        return !m_finishing;
     }
+
+	public void setFinishing(boolean finishing) {
+		m_finishing = finishing;
+	}
 
     public void setSelectedCard(Card card) {
 		for (int i = 0; i < stacks.length; i++) {
