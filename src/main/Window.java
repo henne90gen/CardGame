@@ -10,6 +10,8 @@ public class Window extends JFrame {
 	
 	public final static String NEW_GAME = "New Game";
 	public final static String EXIT_GAME = "Exit";
+	public final static String RESET_STATISTICS = "Reset";
+	public final static String SHOW_STATISTICS = "Show";
 
 	private JPanel main;
 	private ActionListener m_listener;
@@ -23,18 +25,34 @@ public class Window extends JFrame {
 		setVisible(true);
 		
 		JMenuBar menuBar = new JMenuBar();
-		JMenu menu = new JMenu("Game");
-		menuBar.add(menu);
+
+		JMenu game = new JMenu("Game");
+		game.setMnemonic(KeyEvent.VK_G);
+		menuBar.add(game);
 
 		JMenuItem newGame = new JMenuItem(NEW_GAME, KeyEvent.VK_N);
 		newGame.addActionListener(listener);
 		newGame.setActionCommand(NEW_GAME);
-		menu.add(newGame);
+		game.add(newGame);
 
 		JMenuItem exitGame = new JMenuItem(EXIT_GAME, KeyEvent.VK_X);
 		exitGame.addActionListener(listener);
 		exitGame.setActionCommand(EXIT_GAME);
-		menu.add(exitGame);
+		game.add(exitGame);
+
+		JMenu statistics = new JMenu("Statistics");
+		statistics.setMnemonic(KeyEvent.VK_S);
+		menuBar.add(statistics);
+
+		JMenuItem showStatistics = new JMenuItem(SHOW_STATISTICS, KeyEvent.VK_S);
+		showStatistics.addActionListener(listener);
+		showStatistics.setActionCommand(SHOW_STATISTICS);
+		statistics.add(showStatistics);
+
+		JMenuItem resetStatistics = new JMenuItem(RESET_STATISTICS, KeyEvent.VK_R);
+		resetStatistics.addActionListener(listener);
+		resetStatistics.setActionCommand(RESET_STATISTICS);
+		statistics.add(resetStatistics);
 
 		setJMenuBar(menuBar);
 		

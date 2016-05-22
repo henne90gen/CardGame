@@ -4,6 +4,7 @@ import log.Log;
 import main.Board;
 import main.Card;
 import main.Game;
+import main.Statistics;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,14 +29,11 @@ public class Mau extends Game implements ActionListener {
 
 	@Override
 	protected void resetGame() {
+		resetOpponents();
+		super.resetGame();
+
 		cardEffectsNextPlayer = true;
 		cardsToDrawForNextPlayer = 0;
-
-		resetOpponents();
-
-		resetPlayer();
-
-		resetDeck();
 
 		Log.setVerbosity(false);
 
@@ -49,6 +47,7 @@ public class Mau extends Game implements ActionListener {
 		m_deck.playCard(m_deck.dealCard());
 
 		Log.setVerbosity(true);
+		stats.startTimer();
 	}
 
 	@Override
@@ -57,6 +56,7 @@ public class Mau extends Game implements ActionListener {
 			case DECK_TO_PLAYER:
 				Card tmp = m_deck.dealCard();
 				m_player.addCard(tmp);
+				stats.addMove();
 				playOpponent(0);
 				break;
 			case PLAYER_TO_BOARD:
@@ -71,6 +71,7 @@ public class Mau extends Game implements ActionListener {
 						if (pCard.getValue() == 6) {
 							Log.w(PREFIX, "Player played " + pCard.getValueAsString() + " of " + pCard.getSuit().toString());
 							m_deck.playCard(m_player.removeSelectedCard());
+							stats.addMove();
 							playedCard = true;
 							cardsToDrawForNextPlayer += 2;
 							cardEffectsNextPlayer = true;
@@ -90,6 +91,7 @@ public class Mau extends Game implements ActionListener {
 				} else if (m_deck.areCompatible(dCard, pCard)) {
 					Log.w(PREFIX, "Player played " + pCard.getValueAsString() + " of " + pCard.getSuit().toString());
 					m_deck.playCard(m_player.removeSelectedCard());
+					stats.addMove();
 					cardEffectsNextPlayer = true;
 					if (pCard.getValue() == 6) {
 						cardsToDrawForNextPlayer += 2;
@@ -262,7 +264,7 @@ public class Mau extends Game implements ActionListener {
 
 	@Override
 	public void resetStatistics() {
-
+		stats = new Statistics(PREFIX);
 	}
 
 	@Override

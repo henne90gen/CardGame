@@ -1,5 +1,6 @@
 package main;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -31,6 +32,14 @@ public abstract class Game implements ActionListener {
 				stats.stopTimer();
 				if (window.isVisible()) window.dispose();
 				else System.exit(0);
+				break;
+			case Window.RESET_STATISTICS:
+				stats.resetStatsFile();
+				break;
+			case Window.SHOW_STATISTICS:
+				String session = "Session:\n    Time played: " + stats.getTimeAsString(stats.getTime()) + "\n    Moves: " + stats.getMoves() + "\n\n";
+				String total = "Overall:\n    Time played: " + stats.getTimeAsString(stats.getTotalTime() + stats.getTime()) + "\n    Moves: " + (stats.getTotalMoves() + stats.getMoves());
+				JOptionPane.showConfirmDialog(window, session + total, "Statistics", JOptionPane.DEFAULT_OPTION);
 				break;
 		}
 	}
