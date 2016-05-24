@@ -42,7 +42,7 @@ public class Solitaire extends Game {
 		switch (e.getActionCommand()) {
             case BOARD_TO_PLAYER:
             {
-                if (moveCardToPlayer(m_board.getSelectedCard())) stats.addMove();
+                moveCardToPlayer(m_board.getSelectedCard());
                 break;
             }
 			case DECK_TO_BOARD:         // deck to player and then deck to board
@@ -54,18 +54,12 @@ public class Solitaire extends Game {
 					stats.addMove();
                     return;
                 }
-                for (int i = 0; i < m_board.getMaxCardsX(); i++) {
-                    if (m_board.getTopCard(i) != null) {
-                        if (m_board.areCompatible(m_board.getTopCard(i), c)) { 		// Moving card from deck to next possible position on board
-                            m_board.addCard(m_deck.removeFaceUpCard(), i);
-							stats.addMove();
-                            break;
-                        }
-                    } else if (c.getValue() == 12) { 			// Moving King to empty place on board
-						m_board.addCard(m_deck.removeFaceUpCard(), i);
+                for (int i = 0; i < m_board.getMaxCardsX(); i++) {		// Moving card from deck to next possible position on board
+                    if (((m_board.getTopCard(i) != null && m_board.areCompatible(m_board.getTopCard(i), c)) || (c.getValue() == 12 && m_board.getTopCard(i) == null)) && !window.isAnimating()) {
+						window.animate(m_board, m_deck, i);
 						stats.addMove();
 						break;
-					}
+                    }
                 }
                 break;
             }
@@ -105,6 +99,7 @@ public class Solitaire extends Game {
 					return false;
 				}
 				m_player.addCard(cl.get(cl.size() - 1), c.getSuit().ordinal());
+				stats.addMove();
 				return true;
 			}
 		}
@@ -119,7 +114,7 @@ public class Solitaire extends Game {
 				Card c = m_board.getTopCard(i);
 				if (c != null) {
 					m_board.setSelectedCard(c);
-					if (moveCardToPlayer(c)) stats.addMove();
+					moveCardToPlayer(c);
 					try {
 						Thread.sleep(timeDelay);
 					} catch (InterruptedException e) {

@@ -24,12 +24,12 @@ public class SolitaireDeck extends Deck {
         if (!isEmpty()) {
             for (int i = 0; i < cards.size(); i++) {
                 cards.get(i).setFaceUp(false);
-                cards.get(i).setLocation(border * 2 + Card.WIDTH, border);
+                cards.get(i).setBounds(border * 2 + Card.WIDTH, border, Card.WIDTH, Card.HEIGHT);
             }
         }
         for (int i = 0; i < faceUpStack.size(); i++) {
             faceUpStack.get(i).setFaceUp(true);
-            faceUpStack.get(i).setLocation(border, border);
+            faceUpStack.get(i).setBounds(border, border, Card.WIDTH, Card.HEIGHT);
         }
     }
 

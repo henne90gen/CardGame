@@ -10,7 +10,6 @@ import java.util.ArrayList;
 
 public class SolitaireBoard extends Board {
 
-	private ArrayList<Card>[] stacks;
 	private boolean m_finishing = false;
 
 	public SolitaireBoard() {
@@ -20,30 +19,11 @@ public class SolitaireBoard extends Board {
 		cards = null;
 		stacks = new ArrayList[(int)maxCardsX];
 		addMouseListener(this);
+		setLayout(null);
 		for (int i = 0; i < stacks.length; i++) {
 			stacks[i] = new ArrayList<Card>();
 		}
 	}
-
-	public void addCard(Card card, int stack) {
-		if (card != null) {
-			card.setFaceUp(!initiating);
-			for (Card c : stacks[stack]) {
-				remove(c);
-			}
-			stacks[stack].add(card);
-			for (int i = stacks[stack].size() - 1; i >= 0; i--) {
-				add(stacks[stack].get(i));
-			}
-			refresh();
-		}
-	}
-
-	public void addCard(ArrayList<Card> c, int stack) {
-		for (int i = 0; i < c.size(); i++) {
-            addCard(c.get(i), stack);
-        }
-    }
 
 	public ArrayList<Card> removeSelectedCards() {
         int stack = -1;
@@ -100,7 +80,7 @@ public class SolitaireBoard extends Board {
 				if (stacks[i].get(j).isHighlighted()) {
                     y -= border / 2;
                 }
-				stacks[i].get(j).setLocation(x, y);
+				stacks[i].get(j).setBounds(x, y, Card.WIDTH, Card.HEIGHT);
 			}
 		}
 		super.paintComponent(g);

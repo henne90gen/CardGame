@@ -4,12 +4,32 @@ import main.Card;
 import org.junit.Test;
 import solitaire.Solitaire;
 
+import java.awt.event.ActionEvent;
+
+import static main.Game.DECK_TO_BOARD;
+
 /**
  * Created by Henne on 5/15/2016.
  */
 public class SolitaireTest {
 
     Solitaire solitaire;
+
+    @Test
+    public void animation() throws Exception {
+        solitaire = new Solitaire();
+        solitaire.resetDeck();
+        solitaire.resetBoard();
+        solitaire.getBoard().addCard(solitaire.getDeck().getCard(Card.Suit.Clubs, 12), 0);
+        solitaire.getBoard().addCard(solitaire.getDeck().getCard(Card.Suit.Diamonds, 12), 1);
+
+        solitaire.getDeck().showNextCard();
+        solitaire.actionPerformed(new ActionEvent(SolitaireTest.this, 0, DECK_TO_BOARD));
+
+        Thread.sleep(600);
+
+        assert solitaire.getBoard().getTopCard(0).getSuit() == Card.Suit.Diamonds && solitaire.getBoard().getTopCard(0).getValue() == 11;
+    }
 
     @Test
     public void moveCardToPlayer() throws Exception {

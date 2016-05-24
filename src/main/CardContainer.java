@@ -14,6 +14,8 @@ public class CardContainer extends JPanel implements MouseListener {
 	protected int border;
 	protected String actionCommand;
 	protected ArrayList<Card> cards = new ArrayList<Card>();
+	protected ArrayList<Card>[] stacks;
+	protected boolean initiating;
 	
 	public void addCard(Card card) {
 		if (card != null) {
@@ -25,6 +27,26 @@ public class CardContainer extends JPanel implements MouseListener {
 				add(cards.get(i));
 			}
 			refresh();
+		}
+	}
+
+	public void addCard(Card card, int stack) {
+		if (card != null) {
+			card.setFaceUp(!initiating);
+			for (Card c : stacks[stack]) {
+				remove(c);
+			}
+			stacks[stack].add(card);
+			for (int i = stacks[stack].size() - 1; i >= 0; i--) {
+				add(stacks[stack].get(i));
+			}
+			refresh();
+		}
+	}
+
+	public void addCard(ArrayList<Card> c, int stack) {
+		for (int i = 0; i < c.size(); i++) {
+			addCard(c.get(i), stack);
 		}
 	}
 
@@ -62,7 +84,9 @@ public class CardContainer extends JPanel implements MouseListener {
 			}
 		}
 	}
-	
+
+	public int getCardBorder() { return border; }
+
 	public double getMaxCardsX() {
 		return maxCardsX;
 	}
@@ -70,6 +94,8 @@ public class CardContainer extends JPanel implements MouseListener {
 	public int getNumCards() {
 		return cards.size();
 	}
+
+	public int getNumCardsOnStack(int i) { return stacks[i].size(); }
 
 	protected Dimension getDimension() { return new Dimension(0, 0); }
 	

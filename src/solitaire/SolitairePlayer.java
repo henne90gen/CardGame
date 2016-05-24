@@ -29,6 +29,7 @@ public class SolitairePlayer extends Player {
 			stacks[i] = new ArrayList();
 		}
 		addMouseListener(this);
+		setLayout(null);
 		try {
 			BufferedImage spriteSheet = ImageIO.read(new File("res/suit-icons.png"));
 			int width = (int) (spriteSheet.getWidth() / maxCardsX);
@@ -85,7 +86,7 @@ public class SolitairePlayer extends Player {
 			for (int j = 0; j < stacks[i].size(); j++) {
 				int x = border + (Card.WIDTH + border) * i;
 				int y = border;
-				stacks[i].get(j).setLocation(x, y);
+				stacks[i].get(j).setBounds(x, y, Card.WIDTH, Card.HEIGHT);
 			}
 		}
 	}

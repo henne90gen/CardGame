@@ -3,8 +3,6 @@ package main;
 import java.awt.*;
 
 public class Board extends CardContainer {
-	
-	protected boolean initiating;
 
 	@Override
 	public void paintComponent(Graphics g) {
