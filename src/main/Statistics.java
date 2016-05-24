@@ -34,7 +34,7 @@ public class Statistics extends JPanel implements Runnable {
         m_timeLabel = new JLabel();
         add(m_timeLabel);
 
-        m_moveLabel = new JLabel(new Integer(m_moves).toString());
+        m_moveLabel = new JLabel("Moves: " + new Integer(m_moves).toString());
         add(m_moveLabel);
 
         startTimer();
@@ -46,7 +46,7 @@ public class Statistics extends JPanel implements Runnable {
 
     public void addMove() {
         m_moves++;
-        m_moveLabel.setText(new Integer(m_moves).toString());
+        m_moveLabel.setText("Moves: " + new Integer(m_moves).toString());
         updateStatsFile();
     }
 
@@ -92,7 +92,7 @@ public class Statistics extends JPanel implements Runnable {
         m_paused = false;
         while (m_running) {
             if (!m_paused) m_time = System.nanoTime() - startTime;
-            m_timeLabel.setText(getTimeAsString(m_time));
+            m_timeLabel.setText("Time: " + getTimeAsString(m_time));
             try { Thread.sleep(1000); } catch (InterruptedException e) { e.printStackTrace(); }
         }
     }

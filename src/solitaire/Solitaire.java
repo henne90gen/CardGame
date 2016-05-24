@@ -88,7 +88,12 @@ public class Solitaire extends Game {
 				super.actionPerformed(e);
 		}
 		if (m_board.canFinish()) {
-			autoFinishGame();
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					autoFinishGame();
+				}
+			}).start();
 		}
 	}
 
@@ -106,7 +111,8 @@ public class Solitaire extends Game {
 		return false;
 	}
 
-	public void autoFinishGame() {
+	public synchronized void autoFinishGame() {
+		int timeDelay = 50;
 		m_board.setFinishing(true);
 		while (!m_player.gameIsFinished()) {
 			for (int i = 0; i < m_board.getMaxCardsX(); i++) {
@@ -114,6 +120,11 @@ public class Solitaire extends Game {
 				if (c != null) {
 					m_board.setSelectedCard(c);
 					if (moveCardToPlayer(c)) stats.addMove();
+					try {
+						Thread.sleep(timeDelay);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 			if (m_deck.getFaceUpCard() != null) {
@@ -122,10 +133,20 @@ public class Solitaire extends Game {
 				if (m_deck.getFaceUpCard() == null || (c.getSuit() == m_deck.getFaceUpCard().getSuit() && c.getValue() == m_deck.getFaceUpCard().getValue())) {
 					m_deck.showNextCard();
 					stats.addMove();
+					try {
+						Thread.sleep(timeDelay);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 				}
 			} else {
 				m_deck.showNextCard();
 				stats.addMove();
+				try {
+					Thread.sleep(timeDelay);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		stats.stopTimer();

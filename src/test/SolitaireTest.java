@@ -50,7 +50,7 @@ public class SolitaireTest {
 
     @Test
     public void autoFinishGameWithCardsOnDeck() throws Exception {
-        for (int j = 0; j < 50; j++) {
+        for (int j = 0; j < 5; j++) {
             solitaire = new Solitaire();
             solitaire.resetDeck();
             solitaire.resetBoard();
