@@ -109,4 +109,12 @@ public class SolitairePlayer extends Player {
 		}
 		return true;
 	}
+
+	@Override
+	public int getNumCardsOnStack(int i) { return 0; }
+
+	@Override
+	public Point getNextCardLocation(int i) {
+		return new Point(border + i * (Card.WIDTH + border), border);
+	}
 }

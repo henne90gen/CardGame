@@ -50,19 +50,66 @@ public class Solitaire extends Game {
                 Card c = m_deck.getFaceUpCard();
                 if (c == null) { return; }
                 if (c.getValue() == 0 || m_player.getCard(c.getSuit().ordinal()).getValue() + 1 == c.getValue()) {		// Moving card from deck to player
-                    m_player.addCard(m_deck.removeFaceUpCard(), c.getSuit().ordinal());
+                    if (m_board.isFinishing()) {
+						m_player.addCard(m_deck.removeFaceUpCard(), c.getSuit().ordinal());
+					} else {
+						window.animate(m_player, m_deck, c.getSuit().ordinal());
+					}
 					stats.addMove();
                     return;
                 }
                 for (int i = 0; i < m_board.getMaxCardsX(); i++) {		// Moving card from deck to next possible position on board
                     if (((m_board.getTopCard(i) != null && m_board.areCompatible(m_board.getTopCard(i), c)) || (c.getValue() == 12 && m_board.getTopCard(i) == null)) && !window.isAnimating()) {
-						window.animate(m_board, m_deck, i);
+						if (m_board.isFinishing()) {
+							m_board.addCard(m_deck.removeFaceUpCard(), i);
+						} else {
+							window.animate(m_board, m_deck, i);
+						}
 						stats.addMove();
 						break;
                     }
                 }
                 break;
             }
+			case BOARD_TO_BOARD:
+			{
+				Card c = m_board.getSelectedCard();
+				Card tmp = null;
+				for (int i = 0; i < m_board.getMaxCardsX(); i++) {
+					if (m_board.getNumCardsOnStack(i) != 0) {
+						boolean isSameStack = false;
+						for (int j = 0; j < m_board.getNumCardsOnStack(i); j++) {
+							m_board.setSelectedCard(i, j);
+							tmp = m_board.getSelectedCard();
+							if (c.getSuit() == tmp.getSuit() && c.getValue() == tmp.getValue()) {
+								isSameStack = true;
+							}
+						}
+						m_board.setSelectedCard(i, m_board.getNumCardsOnStack(i) - 1);
+						tmp = m_board.getSelectedCard();
+						if (m_board.areCompatible(tmp, c) && !isSameStack) {
+							m_board.setSelectedCard(c);
+							if (m_board.isFinishing()) {
+								m_board.addCard(m_board.removeSelectedCards(), i);
+							} else {
+								window.animate(m_board, c, i);
+							}
+							stats.addMove();
+							return;
+						}
+					} else if (c.getValue() == 12) {
+						m_board.setSelectedCard(c);
+						if (m_board.isFinishing()) {
+							m_board.addCard(m_board.removeSelectedCards(), i);
+						} else {
+							window.animate(m_board, c, i);
+						}
+						stats.addMove();
+						return;
+					}
+				}
+				break;
+			}
 			case PLAYER_TO_BOARD:
 				Card c = m_player.getSelectedCard();
 				for (int i = 0; i < m_board.getMaxCardsX(); i++) {
@@ -74,9 +121,6 @@ public class Solitaire extends Game {
 						}
 					}
 				}
-				break;
-			case ADD_MOVE:
-				stats.addMove();
 				break;
 			default:
 				super.actionPerformed(e);

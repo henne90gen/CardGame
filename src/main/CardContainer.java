@@ -122,4 +122,6 @@ public class CardContainer extends JPanel implements MouseListener {
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {}
+
+	public Point getNextCardLocation(int i) { return null; }
 }

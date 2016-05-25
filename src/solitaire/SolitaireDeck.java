@@ -33,7 +33,7 @@ public class SolitaireDeck extends Deck {
         }
     }
 
-    public void showNextCard() {
+    public synchronized void showNextCard() {
         for (Card c : faceUpStack) {
             remove(c);
         }

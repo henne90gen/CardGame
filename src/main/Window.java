@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
 public class Window extends JFrame {
 
@@ -20,6 +21,7 @@ public class Window extends JFrame {
 	private JPanel m_animations;
 	private ActionListener m_listener;
 	private boolean m_animating = false;
+	private boolean m_waitForNextThread = true;
 
 	public Window(String name, ActionListener listener) {
 		super(name);
@@ -62,59 +64,132 @@ public class Window extends JFrame {
 	}
 
 	/**
-	 * Moves a card from
-	 * @param b The destination board
-	 * @param d The deck where the card is going to be taken from
-     * @param i The destination stack on the board
+	 * Moves the top card from the deck to the specified stack on the CardContainer
+	 * @param destination The destination card container
+	 * @param source The card container where the card is going to be taken from
+     * @param i The destination stack on the destination card container
      */
-	public void animate(Board b, Deck d, int i) {
+	public void animate(CardContainer destination, Deck source, int i) {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
 				m_animating = true;
-				double speed = 10;
-				long lastTime = System.nanoTime();
 
-				Card c = d.getFaceUpCard();
+				Card c = source.getFaceUpCard();
 				Point cPoint = c.getLocation();
-				cPoint.translate((int) d.getLocation().getX(), (int) d.getLocation().getY());
-				Point cDestination = new Point(b.getCardBorder() + i * (Card.WIDTH + b.getCardBorder()), (int)(b.getCardBorder() + b.getNumCardsOnStack(i) * (b.getCardBorder() * 1.75f)));
-				cDestination.translate((int) b.getLocation().getX(), (int) b.getLocation().getY());
+				cPoint.translate((int) source.getLocation().getX(), (int) source.getLocation().getY());
+				Point cDestination = destination.getNextCardLocation(i);
+				cDestination.translate((int) destination.getLocation().getX(), (int) destination.getLocation().getY());
 
-				Log.w("Window", "X: " + cPoint.getX() + " | Y: " + cPoint.getY());
-				Log.w("Window", "X: " + cDestination.getX() + " | Y: " + cDestination.getY());
-
-				c = d.removeFaceUpCard();
-				m_animations.add(c);
-				double x = cPoint.getX();
-				double y = cPoint.getY();
-				c.setBounds((int)x, (int)y, Card.WIDTH, Card.HEIGHT);
+				c = source.removeFaceUpCard();
+				animate(c, cPoint, cDestination);
+				destination.addCard(c, i);
 				refresh();
-				while (m_animating) {
-					long currentTime = System.nanoTime();
-					if (currentTime - lastTime > 1000000000 / 120) {
-						lastTime = currentTime;
-						double angle = Math.atan((y - cDestination.getY()) / (x - cDestination.getX())) + 3.14159265359;
-						x += Math.cos(angle) * speed;
-						y += Math.sin(angle) * speed;
-						c.setBounds((int)x, (int)y, Card.WIDTH, Card.HEIGHT);
-						refresh();
-						if (c.getLocation().getX() <= cDestination.getX()) {
-							m_animations.remove(c);
-							refresh();
-							b.addCard(c, i);
-							m_animating = false;
-						}
-					} else {
-						try {
-							Thread.sleep(((1000000000 / 120) - (currentTime - lastTime)) / 1000000);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-					}
-				}
 			}
 		}).start();
+	}
+
+	public void animate(Board b, Card source, int destination) {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				m_animating = true;
+
+				b.setSelectedCard(source);
+
+				Card c = b.getSelectedCard();
+
+				ArrayList<Card> cards = b.removeSelectedCards();
+				ArrayList<Thread> threads = new ArrayList<Thread>();
+
+				m_waitForNextThread = true;
+
+				for (int i = cards.size() - 1; i >= 0; i--) {
+					int index = i;
+					Thread t = new Thread(new Runnable() {
+						@Override
+						public void run() {
+							Log.w("Window", cards.get(index).getValueAsString() + " of " + cards.get(index).getSuit().toString());
+							/*cPoint.translate(0, (int)(index * (b.getCardBorder() * 1.75f)));*/
+
+							// Starting point for the card
+							Point cPoint = c.getLocation();
+							cPoint.translate((int) b.getLocation().getX(), (int) b.getLocation().getY());
+							cPoint.translate(0, (int)(index * (b.getCardBorder() * 1.75f)));
+
+							// Destination point for the card
+							Point cDestination = b.getNextCardLocation(destination);
+							cDestination.translate((int) b.getLocation().getX(), (int) b.getLocation().getY());
+							cDestination.translate(0, (int)(index * (b.getCardBorder() * 1.75f)));
+
+							Log.w("Window", "sourceX: " + cPoint.getY() + " | destinationX: " + cDestination.getY());
+							m_waitForNextThread = false;
+							animate(cards.get(index), cPoint, cDestination);
+						}
+					});
+					threads.add(t);
+				}
+
+				for (int i = 0; i < threads.size(); i++) {
+					if (i > 0) {
+						while (m_waitForNextThread) {
+							try {
+								Thread.sleep(1);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+						}
+						m_waitForNextThread = true;
+					}
+					threads.get(i).start();
+				}
+
+				for (Thread t : threads) {
+					try {
+						t.join();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+
+				b.addCard(cards, destination);
+				refresh();
+			}
+		}).start();
+	}
+
+	private void animate(Card c, Point source, Point destination) {
+		double nspu = 1000000000 / 60;		// nanoseconds per update with an update rate of 60 updates per second
+		long lastTime = System.nanoTime();
+
+		m_animations.add(c);
+		double x = source.getX();
+		double y = source.getY();
+		double speed = source.distance(destination) / 40;
+		while (m_animating) {
+			long currentTime = System.nanoTime();
+			if (currentTime - lastTime > nspu) {
+				lastTime = currentTime;
+				double angle = Math.atan((y - destination.getY()) / (x - destination.getX()));
+				if ((x - destination.getX()) > 0) {
+					angle += 3.14159265359;
+				}
+				x += Math.cos(angle) * speed;
+				y += Math.sin(angle) * speed;
+				c.setBounds((int) x, (int) y, Card.WIDTH, Card.HEIGHT);
+				refresh();
+				if (c.getLocation().distance(destination) <= 2.5) {
+					m_animations.remove(c);
+					m_animating = false;
+				}
+			} else {
+				try {
+					Thread.sleep((long) ((nspu) - (currentTime - lastTime)) / 1000000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 
 	public void refresh() {

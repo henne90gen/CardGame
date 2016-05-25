@@ -9,6 +9,7 @@ public abstract class Game implements ActionListener {
 
 	public final static String DECK_TO_BOARD = "deck to card";
 	public final static String DECK_TO_PLAYER = "deck to player";
+	public final static String BOARD_TO_BOARD = "board to board";
 	public final static String BOARD_TO_PLAYER = "board to player";
 	public final static String PLAYER_TO_BOARD = "player to board";
 

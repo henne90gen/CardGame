@@ -1,6 +1,7 @@
 package main;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.*;
 
 /**
@@ -173,4 +174,15 @@ public class Statistics extends JPanel implements Runnable {
     public int getTotalMoves() {
         return m_globalMoves;
     }
+
+    protected Dimension getDimension() { return new Dimension(300, 50); }
+
+    @Override
+    public Dimension getPreferredSize() { return getDimension(); }
+
+    @Override
+    public Dimension getMinimumSize() { return getDimension(); }
+
+    @Override
+    public Dimension getMaximumSize() { return getDimension(); }
 }

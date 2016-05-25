@@ -2,6 +2,7 @@ package solitaire;
 
 import main.Board;
 import main.Card;
+import main.Game;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -23,48 +24,6 @@ public class SolitaireBoard extends Board {
 		for (int i = 0; i < stacks.length; i++) {
 			stacks[i] = new ArrayList<Card>();
 		}
-	}
-
-	public ArrayList<Card> removeSelectedCards() {
-        int stack = -1;
-        int id = -1;
-        for (int i = 0; i < maxCardsX; i++) {
-            for (int j = 0; j < stacks[i].size(); j++) {
-                Card tmp = stacks[i].get(j);
-                if (tmp.isHighlighted()) {
-                    stack = i;
-                    id = j;
-                    break;
-                }
-            }
-            if (stack != -1 && id != -1) break;
-        }
-        if (stack == -1 || id == -1) return null;
-        int stackSize = stacks[stack].size();
-        ArrayList<Card> result = new ArrayList<Card>();
-        for (int i = id; i < stackSize; i++) {
-            Card c = stacks[stack].remove(id);
-            remove(c);
-			refresh();
-			result.add(c);
-        }
-		return result;
-	}
-
-	public Card getSelectedCard() {
-		for (int i = 0; i < maxCardsX; i++) {
-			for (int j = 0; j < stacks[i].size(); j++) {
-				Card c = stacks[i].get(j);
-				if (c != null && c.isHighlighted()) {
-					return c;
-				}
-			}
-		}
-        return null;
-	}
-
-	public Card getTopCard(int stack) {
-		return (stacks[stack].size() == 0)?null:stacks[stack].get(stacks[stack].size() - 1);
 	}
 
 	@Override
@@ -143,29 +102,9 @@ public class SolitaireBoard extends Board {
         Card tmp = getSelectedCard();
         fireActionPerformed(new ActionEvent(SolitaireBoard.this, 0, null));
         Card c = getSelectedCard();
-        if (c != null) {
+		if (c != null) {
             if (c.getSuit() == tmp.getSuit() && c.getValue() == tmp.getValue()) {
-                for (int i = 0; i < stacks.length; i++) {
-                    if (stacks[i].size() != 0) {
-						boolean isSameStack = false;
-						for (int j = 0; j < stacks[i].size(); j++) {
-							tmp = stacks[i].get(j);
-							if (c.getSuit() == tmp.getSuit() && c.getValue() == tmp.getValue()) {
-								isSameStack = true;
-							}
-						}
-						tmp = stacks[i].get(stacks[i].size() - 1);
-                        if (areCompatible(tmp, c) && !isSameStack) {
-                            addCard(removeSelectedCards(), i);
-							fireActionPerformed(new ActionEvent(SolitaireBoard.this, 0, Solitaire.ADD_MOVE));
-							return;
-                        }
-                    } else if (c.getValue() == 12) {
-                        addCard(removeSelectedCards(), i);
-						fireActionPerformed(new ActionEvent(SolitaireBoard.this, 0, Solitaire.ADD_MOVE));
-						return;
-                    }
-                }
+                fireActionPerformed(new ActionEvent(SolitaireBoard.this, 0, Game.BOARD_TO_BOARD));
             }
         }
 	}
@@ -201,21 +140,7 @@ public class SolitaireBoard extends Board {
 		m_finishing = finishing;
 	}
 
-    public void setSelectedCard(Card card) {
-		for (int i = 0; i < stacks.length; i++) {
-			for (int j = 0; j < stacks[i].size(); j++) {
-				stacks[i].get(j).setHighlighted(false);
-			}
-		}
-		for (int i = 0; i < stacks.length; i++) {
-            for (int j = 0; j < stacks[i].size(); j++) {
-                Card c = stacks[i].get(j);
-                if (c.getSuit() == card.getSuit() && c.getValue() == card.getValue()) {
-                    stacks[i].get(j).setHighlighted(true);
-                }
-            }
-        }
-    }
+	public boolean isFinishing() { return m_finishing; }
 
 	public void setSelectedCard(int stack, int index) {
 		for (int i = 0; i < stacks.length; i++) {
@@ -228,5 +153,11 @@ public class SolitaireBoard extends Board {
 				stacks[stack].get(index).setHighlighted(true);
 			}
 		}
+	}
+
+	@Override
+	public Point getNextCardLocation(int i) {
+		return new Point(border + i * (Card.WIDTH + border), (int)(border + getNumCardsOnStack(i) * (border * 1.75f)));
+
 	}
 }
